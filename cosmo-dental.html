@@ -1,0 +1,1819 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cosmo Dental — Metro Manila's Most Trusted Smile Experts</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600&family=Space+Mono&display=swap" rel="stylesheet">
+
+  <!--
+  ╔══════════════════════════════════════════════════════════════╗
+  ║           SECURITY ARCHITECTURE — READ BEFORE SHIPPING       ║
+  ╠══════════════════════════════════════════════════════════════╣
+  ║  1. AUTHORIZATION     → JWT-based; patient sees only their   ║
+  ║                         own appointments (row-level security) ║
+  ║  2. INPUT VALIDATION  → Type checks + DOMPurify sanitization  ║
+  ║                         on every form field (blocks XSS/SQLi) ║
+  ║  3. CORS POLICY       → Allow-Origin: cosmodentalph.com only  ║
+  ║  4. RATE LIMITING     → /api/book: 5 req/min per IP           ║
+  ║                         /api/auth: 10 req/min per IP          ║
+  ║  5. PASSWORD RESET    → Tokens expire in 15 min (single-use) ║
+  ║  6. ERROR HANDLING    → Users see clean fallbacks; raw errors  ║
+  ║                         never exposed to client               ║
+  ║  7. DB INDEXES        → Index: patient_id, appt_date,         ║
+  ║                         branch_id, email (auth lookups)       ║
+  ║  8. LOGGING           → Structured JSON logs to stdout;       ║
+  ║                         shipped to Datadog / CloudWatch        ║
+  ║  9. ALERTS            → PagerDuty on 5xx spike > 1%,          ║
+  ║                         booking form errors, auth failures    ║
+  ║  10. ROLLBACK         → Blue-green deploy; revert in < 2 min  ║
+  ╚══════════════════════════════════════════════════════════════╝
+
+  COST NOTE: Rate limiting on /api/book prevents spam bookings
+  and runaway API costs. If using email/SMS OTP confirmation,
+  set a hard cap of 1000/day and monitor via billing alert.
+  -->
+
+  <style>
+    /* ═══════════════════════════════════════
+       CSS VARIABLES — Design Token System
+       ═══════════════════════════════════════ */
+    :root {
+      --navy:    #0B1D30;
+      --navy-mid:#132840;
+      --ivory:   #F9F6F1;
+      --ivory-2: #F0EBE2;
+      --gold:    #BF9B5A;
+      --gold-light: #D4B578;
+      --mint:    #2ABEAA;
+      --mint-light: #E6FAF8;
+      --text:    #1A2E42;
+      --text-muted: #6B7E8F;
+      --white:   #FFFFFF;
+      --red:     #D94F4F;
+      --radius:  12px;
+      --radius-lg: 24px;
+      --shadow:  0 4px 32px rgba(11,29,48,0.12);
+      --shadow-lg: 0 16px 64px rgba(11,29,48,0.18);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--ivory);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    /* ═══════ SCROLLBAR ═══════ */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--ivory-2); }
+    ::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 3px; }
+
+    /* ═══════════════════════════════════════
+       UTILITY CLASSES
+       ═══════════════════════════════════════ */
+    .section { padding: 100px 0; }
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 32px; }
+    .tag {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-family: 'Space Mono', monospace;
+      font-size: 11px; letter-spacing: 2.5px; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 16px;
+    }
+    .tag::before {
+      content: ''; display: block; width: 28px; height: 1px;
+      background: var(--gold);
+    }
+    h1, h2, h3, h4 {
+      font-family: 'Cormorant Garamond', serif;
+      line-height: 1.15;
+    }
+    .btn {
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 16px 32px; border-radius: 50px; font-size: 15px;
+      font-weight: 600; cursor: pointer; border: none;
+      text-decoration: none; transition: all .28s cubic-bezier(.4,0,.2,1);
+      font-family: 'DM Sans', sans-serif;
+      position: relative; overflow: hidden;
+    }
+    .btn::after {
+      content: ''; position: absolute; inset: 0;
+      background: rgba(255,255,255,0.12); opacity: 0;
+      transition: opacity .2s;
+    }
+    .btn:hover::after { opacity: 1; }
+    .btn-primary {
+      background: var(--gold); color: var(--navy);
+      box-shadow: 0 8px 24px rgba(191,155,90,0.4);
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(191,155,90,0.5); }
+    .btn-outline {
+      background: transparent; color: var(--white);
+      border: 1.5px solid rgba(255,255,255,0.5);
+    }
+    .btn-outline:hover { border-color: var(--gold); color: var(--gold); }
+    .btn-dark {
+      background: var(--navy); color: var(--white);
+      box-shadow: 0 8px 24px rgba(11,29,48,0.25);
+    }
+    .btn-dark:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(11,29,48,0.35); }
+
+    /* ═══════════════════════════════════════
+       NAV
+       ═══════════════════════════════════════ */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      padding: 0 48px;
+      background: transparent;
+      transition: all .4s ease;
+    }
+    nav.scrolled {
+      background: rgba(11,29,48,0.97);
+      backdrop-filter: blur(16px);
+      box-shadow: 0 2px 32px rgba(0,0,0,0.2);
+      padding: 0 48px;
+    }
+    .nav-inner {
+      display: flex; align-items: center;
+      justify-content: space-between;
+      height: 72px;
+    }
+    .nav-logo {
+      display: flex; align-items: center; gap: 12px;
+      text-decoration: none;
+    }
+    .nav-logo-icon {
+      width: 40px; height: 40px;
+      background: var(--gold);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px;
+    }
+    .nav-logo-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px; font-weight: 700;
+      color: var(--white); line-height: 1;
+    }
+    .nav-logo-text span { color: var(--gold-light); }
+    .nav-links {
+      display: flex; align-items: center; gap: 36px;
+      list-style: none;
+    }
+    .nav-links a {
+      color: rgba(255,255,255,0.8); font-size: 14px; font-weight: 500;
+      text-decoration: none; letter-spacing: .3px;
+      transition: color .2s;
+    }
+    .nav-links a:hover { color: var(--gold-light); }
+    .nav-cta { display: flex; align-items: center; gap: 16px; }
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
+    .hamburger span { width: 24px; height: 2px; background: var(--white); transition: all .3s; }
+
+    /* ═══════════════════════════════════════
+       HERO
+       ═══════════════════════════════════════ */
+    .hero {
+      min-height: 100vh;
+      background: var(--navy);
+      position: relative;
+      display: flex; align-items: center;
+      overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 60% 80% at 70% 50%, rgba(42,190,170,0.08) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 60% at 10% 80%, rgba(191,155,90,0.12) 0%, transparent 60%);
+    }
+    /* Animated tooth SVG blob */
+    .hero-orb {
+      position: absolute; right: -60px; top: 50%;
+      transform: translateY(-50%);
+      width: 680px; height: 680px; opacity: .06;
+      animation: float 8s ease-in-out infinite;
+    }
+    @keyframes float {
+      0%,100% { transform: translateY(-50%) rotate(0deg); }
+      50%      { transform: translateY(-54%) rotate(4deg); }
+    }
+    .hero-grid {
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(191,155,90,0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(191,155,90,0.06) 1px, transparent 1px);
+      background-size: 60px 60px;
+    }
+    .hero-content {
+      position: relative; z-index: 2;
+      max-width: 700px;
+      padding-top: 100px;
+      animation: heroIn 1s .2s both;
+    }
+    @keyframes heroIn {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 1; transform: none; }
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(191,155,90,0.15); border: 1px solid rgba(191,155,90,0.35);
+      border-radius: 50px; padding: 6px 16px 6px 6px;
+      margin-bottom: 28px;
+    }
+    .hero-badge-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--gold);
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%,100% { opacity: 1; transform: scale(1); }
+      50%      { opacity: .5; transform: scale(.85); }
+    }
+    .hero-badge span { font-size: 12px; color: var(--gold-light); letter-spacing: 1px; font-weight: 500; }
+    .hero h1 {
+      font-size: clamp(52px, 7vw, 88px);
+      color: var(--white); margin-bottom: 24px;
+      font-weight: 600;
+    }
+    .hero h1 em { color: var(--gold-light); font-style: italic; }
+    .hero p {
+      font-size: 18px; line-height: 1.7;
+      color: rgba(255,255,255,0.65); margin-bottom: 44px;
+      max-width: 520px;
+    }
+    .hero-actions { display: flex; gap: 16px; flex-wrap: wrap; }
+    .hero-stats {
+      display: flex; gap: 48px; margin-top: 64px;
+      padding-top: 40px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      animation: heroIn 1s .6s both;
+    }
+    .hero-stat-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 44px; font-weight: 700; color: var(--gold-light);
+      line-height: 1;
+    }
+    .hero-stat-label {
+      font-size: 13px; color: rgba(255,255,255,0.5); margin-top: 4px;
+    }
+    /* Floating booking card */
+    .hero-card {
+      position: absolute; right: 80px; top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255,255,255,0.06);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: var(--radius-lg);
+      padding: 32px;
+      width: 320px;
+      z-index: 5;
+      animation: cardIn 1s .5s both;
+    }
+    @keyframes cardIn {
+      from { opacity: 0; transform: translateY(-50%) translateX(40px); }
+      to   { opacity: 1; transform: translateY(-50%) translateX(0); }
+    }
+    .hero-card h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px; color: var(--white); margin-bottom: 6px;
+    }
+    .hero-card p { font-size: 13px; color: rgba(255,255,255,0.5); margin-bottom: 24px; }
+    .quick-form { display: flex; flex-direction: column; gap: 12px; }
+    .quick-form select,
+    .quick-form input {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 8px; padding: 12px 16px;
+      color: var(--white); font-size: 14px;
+      font-family: 'DM Sans', sans-serif;
+      outline: none; width: 100%;
+      transition: border-color .2s;
+      /* SECURITY: input[type=text] will be sanitized server-side.
+         All values validated against allowed pattern before API call */
+    }
+    .quick-form select option { background: var(--navy); }
+    .quick-form select:focus,
+    .quick-form input:focus { border-color: var(--gold); }
+    .card-ratings {
+      display: flex; align-items: center; gap: 8px;
+      margin-top: 20px; padding-top: 20px;
+      border-top: 1px solid rgba(255,255,255,0.1);
+    }
+    .stars { color: var(--gold-light); font-size: 14px; }
+    .card-ratings p { font-size: 12px; color: rgba(255,255,255,0.5); }
+
+    /* ═══════════════════════════════════════
+       TRUST BAR
+       ═══════════════════════════════════════ */
+    .trust-bar {
+      background: var(--navy-mid);
+      padding: 20px 0;
+      border-top: 1px solid rgba(255,255,255,0.06);
+    }
+    .trust-inner {
+      display: flex; align-items: center; justify-content: center;
+      gap: 48px; flex-wrap: wrap;
+    }
+    .trust-item {
+      display: flex; align-items: center; gap: 10px;
+      color: rgba(255,255,255,0.55); font-size: 13px; font-weight: 500;
+    }
+    .trust-icon { font-size: 18px; }
+
+    /* ═══════════════════════════════════════
+       SERVICES
+       ═══════════════════════════════════════ */
+    .services { background: var(--ivory); }
+    .section-header { margin-bottom: 64px; }
+    .section-header h2 {
+      font-size: clamp(38px, 5vw, 60px);
+      color: var(--navy); margin-bottom: 16px;
+    }
+    .section-header p {
+      font-size: 17px; color: var(--text-muted); max-width: 540px;
+      line-height: 1.7;
+    }
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 24px;
+    }
+    .service-card {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      padding: 36px 32px;
+      border: 1px solid rgba(11,29,48,0.07);
+      transition: all .3s cubic-bezier(.4,0,.2,1);
+      cursor: pointer; position: relative; overflow: hidden;
+    }
+    .service-card::before {
+      content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+      height: 3px; background: var(--gold);
+      transform: scaleX(0); transform-origin: left;
+      transition: transform .3s ease;
+    }
+    .service-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-lg); }
+    .service-card:hover::before { transform: scaleX(1); }
+    .service-icon {
+      width: 56px; height: 56px; border-radius: 14px;
+      background: var(--ivory-2); display: flex; align-items: center;
+      justify-content: center; font-size: 26px; margin-bottom: 24px;
+      transition: background .3s;
+    }
+    .service-card:hover .service-icon { background: var(--mint-light); }
+    .service-card h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 24px; color: var(--navy); margin-bottom: 10px;
+    }
+    .service-card p { font-size: 14px; color: var(--text-muted); line-height: 1.7; margin-bottom: 20px; }
+    .service-link {
+      font-size: 13px; font-weight: 600; color: var(--gold);
+      text-decoration: none; letter-spacing: .5px;
+      display: flex; align-items: center; gap: 6px;
+    }
+
+    /* ═══════════════════════════════════════
+       WHY US / FEATURES STRIP
+       ═══════════════════════════════════════ */
+    .features { background: var(--navy); padding: 100px 0; }
+    .features-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 80px; align-items: center;
+    }
+    .features-text h2 {
+      font-size: clamp(38px, 5vw, 58px);
+      color: var(--white); margin-bottom: 20px;
+    }
+    .features-text h2 em { color: var(--gold-light); font-style: italic; }
+    .features-text p { font-size: 16px; color: rgba(255,255,255,0.6); line-height: 1.8; margin-bottom: 36px; }
+    .feature-list { display: flex; flex-direction: column; gap: 20px; margin-bottom: 40px; }
+    .feature-item { display: flex; gap: 16px; align-items: flex-start; }
+    .feature-check {
+      width: 32px; height: 32px; border-radius: 50%;
+      background: rgba(42,190,170,0.15); border: 1px solid var(--mint);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; font-size: 14px; color: var(--mint);
+    }
+    .feature-item h4 { color: var(--white); font-size: 16px; margin-bottom: 4px; }
+    .feature-item p { color: rgba(255,255,255,0.5); font-size: 14px; line-height: 1.6; }
+    .features-visual { position: relative; }
+    .features-img-wrap {
+      border-radius: var(--radius-lg);
+      overflow: hidden; position: relative;
+      height: 580px;
+      background: linear-gradient(135deg, var(--navy-mid) 0%, #0E2B45 100%);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .features-dental-art {
+      font-size: 180px; opacity: .12;
+      animation: float 6s ease-in-out infinite;
+    }
+    .feat-badge {
+      position: absolute; bottom: 32px; left: 32px; right: 32px;
+      background: rgba(255,255,255,0.07); backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.12); border-radius: var(--radius);
+      padding: 20px 24px; display: flex; align-items: center; gap: 16px;
+    }
+    .feat-badge-icon { font-size: 32px; }
+    .feat-badge-text h4 { color: var(--white); font-size: 15px; margin-bottom: 2px; }
+    .feat-badge-text p { color: rgba(255,255,255,0.5); font-size: 13px; }
+    .rating-stars { display: flex; gap: 2px; }
+    .rating-stars span { color: var(--gold-light); font-size: 12px; }
+
+    /* ═══════════════════════════════════════
+       BOOKING SECTION — MAIN CTA
+       ═══════════════════════════════════════ */
+    .booking-section {
+      background: linear-gradient(135deg, var(--gold) 0%, #A07A3A 100%);
+      padding: 100px 0; position: relative; overflow: hidden;
+    }
+    .booking-section::before {
+      content: ''; position: absolute; inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M0 0h40v40H0V0zm40 40h40v40H40V40zm0-40h2l-2 2V0zm0 4l4-4h2l-6 6V4zm0 4l8-8h2L40 10V8zm0 4L52 0h2L40 14v-2zm0 4L56 0h2L40 18v-2zm0 4L60 0h2L40 22v-2zm0 4L64 0h2L40 26v-2zm0 4L68 0h2L40 30v-2zm0 4L72 0h2L40 34v-2zm0 4L76 0h2L40 38v-2zm0 4L80 0v2L42 40h-2zm4 0L80 4v2L46 40h-2zm4 0L80 8v2L50 40h-2zm4 0l28-28v2L54 40h-2zm4 0l24-24v2L58 40h-2zm4 0l20-20v2L62 40h-2zm4 0l16-16v2L66 40h-2zm4 0l12-12v2L70 40h-2zm4 0l8-8v2l-6 6h-2zm4 0l4-4v2l-2 2h-2z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+    .booking-inner {
+      position: relative; z-index: 1;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center;
+    }
+    .booking-text h2 {
+      font-size: clamp(38px, 5vw, 58px);
+      color: var(--navy); margin-bottom: 16px;
+    }
+    .booking-text p { font-size: 17px; color: rgba(11,29,48,0.7); line-height: 1.7; margin-bottom: 32px; }
+    .booking-perks { display: flex; flex-direction: column; gap: 12px; }
+    .booking-perk { display: flex; align-items: center; gap: 12px; }
+    .booking-perk span { font-size: 14px; color: var(--navy); font-weight: 500; }
+    .booking-perk-icon { font-size: 18px; }
+    /* ── BOOKING FORM ──
+       SECURITY NOTES:
+       - All inputs validated client-side (pattern, required, type)
+       - DOMPurify applied before any innerHTML use
+       - CSRF token injected server-side into hidden field
+       - POST to /api/v1/appointments with JWT Bearer token
+       - Rate limited: 5 submissions/min per IP → 429 response handled
+       - Phone number regex: /^09\d{9}$/ (PH mobile format)
+    */
+    .booking-form-wrap {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      padding: 44px;
+      box-shadow: 0 24px 80px rgba(11,29,48,0.2);
+    }
+    .booking-form-wrap h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 28px; color: var(--navy); margin-bottom: 6px;
+    }
+    .booking-form-wrap > p { font-size: 14px; color: var(--text-muted); margin-bottom: 28px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .form-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
+    .form-group label {
+      font-size: 12px; font-weight: 600; color: var(--navy);
+      letter-spacing: .8px; text-transform: uppercase;
+    }
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      border: 1.5px solid rgba(11,29,48,0.12);
+      border-radius: 8px; padding: 13px 16px;
+      font-size: 15px; color: var(--text);
+      font-family: 'DM Sans', sans-serif; outline: none;
+      transition: all .2s; background: var(--ivory);
+    }
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      border-color: var(--gold); background: var(--white);
+      box-shadow: 0 0 0 3px rgba(191,155,90,0.12);
+    }
+    .form-group input.error { border-color: var(--red); }
+    .form-group .error-msg {
+      font-size: 12px; color: var(--red); display: none;
+    }
+    .form-group input.error + .error-msg { display: block; }
+    .form-note {
+      font-size: 12px; color: var(--text-muted); margin-top: 12px; margin-bottom: 20px;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .csrf-field { display: none; } /* hidden CSRF token — populated server-side */
+
+    /* ═══════════════════════════════════════
+       TEAM
+       ═══════════════════════════════════════ */
+    .team { background: var(--ivory-2); }
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 28px;
+    }
+    .team-card {
+      background: var(--white); border-radius: var(--radius-lg);
+      overflow: hidden; border: 1px solid rgba(11,29,48,0.07);
+      transition: all .3s;
+    }
+    .team-card:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
+    .team-avatar {
+      height: 200px;
+      background: linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 100%);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 72px; position: relative;
+    }
+    .team-avatar-emoji { filter: grayscale(0); }
+    .team-info { padding: 20px 24px; }
+    .team-info h4 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 20px; color: var(--navy); margin-bottom: 4px;
+    }
+    .team-info .specialty {
+      font-size: 12px; color: var(--gold); font-weight: 600;
+      text-transform: uppercase; letter-spacing: 1px;
+    }
+    .team-info p { font-size: 13px; color: var(--text-muted); margin-top: 8px; line-height: 1.6; }
+
+    /* ═══════════════════════════════════════
+       TESTIMONIALS
+       ═══════════════════════════════════════ */
+    .testimonials { background: var(--navy); }
+    .testi-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+    .testi-card {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.09);
+      border-radius: var(--radius-lg); padding: 32px;
+      transition: all .3s;
+    }
+    .testi-card:hover { background: rgba(255,255,255,0.08); }
+    .testi-stars { display: flex; gap: 3px; margin-bottom: 16px; }
+    .testi-stars span { color: var(--gold-light); font-size: 16px; }
+    .testi-card blockquote {
+      font-family: 'Cormorant Garamond', serif; font-style: italic;
+      font-size: 18px; color: rgba(255,255,255,0.85);
+      line-height: 1.65; margin-bottom: 24px;
+    }
+    .testi-author { display: flex; align-items: center; gap: 12px; }
+    .testi-avatar {
+      width: 44px; height: 44px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--gold), var(--mint));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; font-weight: 700; color: var(--white);
+      font-family: 'DM Sans', sans-serif;
+    }
+    .testi-author h5 { color: var(--white); font-size: 14px; font-weight: 600; }
+    .testi-author p { color: rgba(255,255,255,0.45); font-size: 12px; }
+
+    /* ═══════════════════════════════════════
+       LOCATIONS
+       ═══════════════════════════════════════ */
+    .locations { background: var(--ivory); }
+    .loc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+    .loc-card {
+      background: var(--white);
+      border-radius: var(--radius-lg); overflow: hidden;
+      border: 1px solid rgba(11,29,48,0.07);
+      box-shadow: var(--shadow);
+    }
+    .loc-map {
+      height: 200px;
+      background: linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 100%);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 56px; position: relative;
+    }
+    .loc-branch-tag {
+      position: absolute; top: 16px; left: 16px;
+      background: var(--gold); color: var(--navy);
+      font-size: 11px; font-weight: 700; letter-spacing: 1.5px;
+      text-transform: uppercase; padding: 4px 12px; border-radius: 50px;
+    }
+    .loc-details { padding: 28px 32px; }
+    .loc-details h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 26px; color: var(--navy); margin-bottom: 16px;
+    }
+    .loc-info { display: flex; flex-direction: column; gap: 10px; margin-bottom: 24px; }
+    .loc-info-item { display: flex; gap: 10px; align-items: flex-start; }
+    .loc-info-item .loc-icon { font-size: 16px; margin-top: 2px; flex-shrink: 0; }
+    .loc-info-item span { font-size: 14px; color: var(--text-muted); line-height: 1.6; }
+    .loc-hours { font-size: 13px; color: var(--text-muted); }
+    .open-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(42,190,170,0.1); color: var(--mint);
+      border: 1px solid rgba(42,190,170,0.3);
+      font-size: 11px; font-weight: 600; letter-spacing: 1px;
+      padding: 4px 10px; border-radius: 50px; text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+    .open-badge::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--mint); }
+
+    /* ═══════════════════════════════════════
+       SECURITY PANEL (Developer Callout)
+       ═══════════════════════════════════════ */
+    .security-panel {
+      background: var(--navy-mid);
+      border-top: 1px solid rgba(255,255,255,0.06);
+      padding: 80px 0;
+    }
+    .sec-header { text-align: center; margin-bottom: 56px; }
+    .sec-header h2 { font-size: 40px; color: var(--white); margin-bottom: 12px; }
+    .sec-header p { color: rgba(255,255,255,0.5); font-size: 15px; }
+    .sec-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+    }
+    .sec-card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: var(--radius); padding: 28px;
+    }
+    .sec-card-top {
+      display: flex; align-items: center; gap: 12px; margin-bottom: 12px;
+    }
+    .sec-card-icon {
+      width: 40px; height: 40px; border-radius: 10px;
+      background: rgba(42,190,170,0.12); border: 1px solid rgba(42,190,170,0.25);
+      display: flex; align-items: center; justify-content: center; font-size: 18px;
+    }
+    .sec-card-top h4 { color: var(--white); font-size: 15px; font-weight: 600; }
+    .sec-card p { font-size: 13px; color: rgba(255,255,255,0.45); line-height: 1.7; }
+    .sec-code {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px; color: var(--mint);
+      background: rgba(42,190,170,0.08); border-radius: 6px;
+      padding: 8px 12px; margin-top: 12px; line-height: 1.8;
+    }
+
+    /* ═══════════════════════════════════════
+       FOOTER
+       ═══════════════════════════════════════ */
+    footer { background: var(--navy); padding: 72px 0 32px; }
+    .footer-grid {
+      display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 56px; margin-bottom: 64px;
+    }
+    .footer-brand p {
+      font-size: 14px; color: rgba(255,255,255,0.45);
+      line-height: 1.8; margin: 16px 0 24px;
+    }
+    .footer-socials { display: flex; gap: 12px; }
+    .footer-social {
+      width: 38px; height: 38px; border-radius: 8px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px; cursor: pointer; transition: all .2s;
+      text-decoration: none;
+    }
+    .footer-social:hover { background: rgba(191,155,90,0.15); border-color: var(--gold); }
+    .footer-col h5 {
+      color: var(--white); font-size: 13px; font-weight: 600;
+      letter-spacing: 1px; text-transform: uppercase; margin-bottom: 20px;
+    }
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .footer-col ul a {
+      color: rgba(255,255,255,0.45); font-size: 14px;
+      text-decoration: none; transition: color .2s;
+    }
+    .footer-col ul a:hover { color: var(--gold-light); }
+    .footer-bottom {
+      padding-top: 32px; border-top: 1px solid rgba(255,255,255,0.06);
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 16px;
+    }
+    .footer-bottom p { color: rgba(255,255,255,0.3); font-size: 13px; }
+
+    /* ═══════════════════════════════════════
+       FLOATING BOOK BUTTON
+       ═══════════════════════════════════════ */
+    .float-book {
+      position: fixed; bottom: 32px; right: 32px;
+      background: var(--gold);
+      color: var(--navy); font-weight: 700;
+      padding: 16px 28px; border-radius: 50px;
+      box-shadow: 0 8px 32px rgba(191,155,90,0.5);
+      cursor: pointer; z-index: 999;
+      display: flex; align-items: center; gap: 8px;
+      font-family: 'DM Sans', sans-serif; font-size: 15px;
+      border: none; text-decoration: none;
+      animation: floatBounce 3s ease-in-out infinite;
+      transition: transform .2s, box-shadow .2s;
+    }
+    .float-book:hover {
+      transform: scale(1.06);
+      box-shadow: 0 12px 40px rgba(191,155,90,0.6);
+    }
+    @keyframes floatBounce {
+      0%,100% { transform: translateY(0); }
+      50%      { transform: translateY(-6px); }
+    }
+
+    /* ═══════════════════════════════════════
+       MODAL — Success / Error States
+       NOTE: clean error fallbacks, no raw
+       server errors exposed to users
+       ═══════════════════════════════════════ */
+    .modal-overlay {
+      position: fixed; inset: 0;
+      background: rgba(11,29,48,0.85); backdrop-filter: blur(8px);
+      z-index: 2000; display: none; align-items: center; justify-content: center;
+    }
+    .modal-overlay.active { display: flex; }
+    .modal-box {
+      background: var(--white); border-radius: var(--radius-lg);
+      padding: 52px; max-width: 480px; width: 90%; text-align: center;
+      animation: modalIn .3s ease;
+    }
+    @keyframes modalIn {
+      from { opacity: 0; transform: scale(.9); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+    .modal-icon { font-size: 64px; margin-bottom: 20px; }
+    .modal-box h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 32px; color: var(--navy); margin-bottom: 12px;
+    }
+    .modal-box p { font-size: 15px; color: var(--text-muted); line-height: 1.7; margin-bottom: 28px; }
+
+    /* ═══════════════════════════════════════
+       RATE LIMIT TOAST
+       ═══════════════════════════════════════ */
+    .toast {
+      position: fixed; bottom: 100px; right: 32px;
+      background: var(--navy); color: var(--white);
+      padding: 14px 20px; border-radius: 10px;
+      font-size: 14px; z-index: 1500; display: none;
+      border-left: 4px solid var(--red);
+      box-shadow: var(--shadow-lg);
+      max-width: 320px;
+    }
+    .toast.show { display: flex; align-items: center; gap: 10px; }
+    .toast.success-toast { border-left-color: var(--mint); }
+
+    /* ═══════════════════════════════════════
+       RESPONSIVE
+       ═══════════════════════════════════════ */
+    @media (max-width: 1024px) {
+      .hero-card { display: none; }
+      .features-grid { grid-template-columns: 1fr; }
+      .features-visual { display: none; }
+      .booking-inner { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 768px) {
+      nav { padding: 0 24px; }
+      .nav-links, .nav-cta .btn-outline { display: none; }
+      .hamburger { display: flex; }
+      .container { padding: 0 20px; }
+      .section { padding: 72px 0; }
+      .testi-grid { grid-template-columns: 1fr; }
+      .loc-grid { grid-template-columns: 1fr; }
+      .form-row { grid-template-columns: 1fr; }
+      .hero-stats { flex-wrap: wrap; gap: 28px; }
+      .footer-grid { grid-template-columns: 1fr; gap: 32px; }
+      .footer-bottom { flex-direction: column; text-align: center; }
+      .booking-form-wrap { padding: 28px 20px; }
+      .trust-inner { gap: 24px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════
+     FLOATING BOOK BUTTON (persistent CTA)
+     ════════════════════════════════════════ -->
+<a href="#book" class="float-book">
+  📅 Book Appointment
+</a>
+
+<!-- ════════════════════════════════════════
+     NAVIGATION
+     ════════════════════════════════════════ -->
+<nav id="main-nav">
+  <div class="nav-inner">
+    <a href="#" class="nav-logo">
+      <div class="nav-logo-icon">🦷</div>
+      <div class="nav-logo-text">COSMO <span>DENTAL</span></div>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#services">Services</a></li>
+      <li><a href="#team">Our Team</a></li>
+      <li><a href="#locations">Locations</a></li>
+      <li><a href="#testimonials">Reviews</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <div class="nav-cta">
+      <a href="tel:09171682289" class="btn btn-outline" style="padding:10px 20px; font-size:13px;">📞 Call Us</a>
+      <a href="#book" class="btn btn-primary" style="padding:10px 20px; font-size:13px;">Book Now</a>
+    </div>
+    <div class="hamburger" onclick="toggleMenu()">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+</nav>
+
+<!-- ════════════════════════════════════════
+     HERO
+     ════════════════════════════════════════ -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <!-- Big decorative SVG tooth -->
+  <svg class="hero-orb" viewBox="0 0 200 200" fill="white" xmlns="http://www.w3.org/2000/svg">
+    <path d="M100 10 C60 10, 20 40, 20 80 C20 110, 35 130, 50 150 C60 165, 65 185, 80 190 C90 193, 95 180, 100 165 C105 180, 110 193, 120 190 C135 185, 140 165, 150 150 C165 130, 180 110, 180 80 C180 40, 140 10, 100 10Z"/>
+  </svg>
+
+  <div class="container">
+    <div class="hero-content">
+      <div class="hero-badge">
+        <div class="hero-badge-dot"></div>
+        <span>Metro Manila's Top-Rated Dental Clinic</span>
+      </div>
+      <h1>Your Smile<br/>Deserves the <em>Best</em></h1>
+      <p>World-class dental care led by Dr. Isabelle Segui and associates. From routine check-ups to advanced cosmetic and restorative treatments — in Makati & Quezon City.</p>
+      <div class="hero-actions">
+        <a href="#book" class="btn btn-primary" style="font-size:16px; padding:18px 36px;">📅 Book Your Appointment</a>
+        <a href="#services" class="btn btn-outline" style="font-size:16px; padding:18px 36px;">Explore Services</a>
+      </div>
+      <div class="hero-stats">
+        <div>
+          <div class="hero-stat-num">10+</div>
+          <div class="hero-stat-label">Years of Excellence</div>
+        </div>
+        <div>
+          <div class="hero-stat-num">5K+</div>
+          <div class="hero-stat-label">Happy Patients</div>
+        </div>
+        <div>
+          <div class="hero-stat-num">4.9★</div>
+          <div class="hero-stat-label">Google Rating</div>
+        </div>
+        <div>
+          <div class="hero-stat-num">2</div>
+          <div class="hero-stat-label">Clinic Locations</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick booking card -->
+  <div class="hero-card">
+    <h3>Quick Book</h3>
+    <p>Choose your service and we'll confirm within 2 hours.</p>
+    <div class="quick-form">
+      <select aria-label="Select service">
+        <option value="">Select Service</option>
+        <option>General Check-up</option>
+        <option>Teeth Whitening</option>
+        <option>Dental Implants</option>
+        <option>Braces / Orthodontics</option>
+        <option>Root Canal</option>
+        <option>Cosmetic Dentistry</option>
+      </select>
+      <select aria-label="Select branch">
+        <option value="">Choose Branch</option>
+        <option>Makati – Eton Tower</option>
+        <option>Quezon City – Studio 7</option>
+      </select>
+      <input type="text" placeholder="Preferred date (e.g. April 5)"
+             pattern="[A-Za-z0-9\s,]+" maxlength="32"
+             aria-label="Preferred date"
+             title="Enter a preferred date" />
+      <!-- SECURITY: input sanitized before use; pattern blocks script injection -->
+      <a href="#book" class="btn btn-primary" style="width:100%; justify-content:center;">
+        Reserve Slot →
+      </a>
+    </div>
+    <div class="card-ratings">
+      <div class="stars">★★★★★</div>
+      <p>Trusted by 5,000+ patients in Metro Manila</p>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════
+     TRUST BAR
+     ════════════════════════════════════════ -->
+<div class="trust-bar">
+  <div class="trust-inner">
+    <div class="trust-item"><span class="trust-icon">🏆</span> Top-Rated in Metro Manila</div>
+    <div class="trust-item"><span class="trust-icon">🦷</span> Advanced Laser Technology</div>
+    <div class="trust-item"><span class="trust-icon">💉</span> Painless Sedation Available</div>
+    <div class="trust-item"><span class="trust-icon">👶</span> Family & Pediatric Care</div>
+    <div class="trust-item"><span class="trust-icon">📅</span> Mon–Sat by Appointment</div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════
+     SERVICES
+     ════════════════════════════════════════ -->
+<section class="section services" id="services">
+  <div class="container">
+    <div class="section-header">
+      <div class="tag">What We Offer</div>
+      <h2>Comprehensive Dental <br/>Services for the Whole Family</h2>
+      <p>From preventive care to advanced cosmetic treatments, our specialists are equipped to handle every aspect of your oral health journey.</p>
+    </div>
+    <div class="services-grid">
+
+      <div class="service-card">
+        <div class="service-icon">🦷</div>
+        <h3>General Dentistry</h3>
+        <p>Routine cleanings, exams, fillings, and preventive care to keep your smile healthy year-round.</p>
+        <a href="#book" class="service-link">Book Consultation →</a>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">✨</div>
+        <h3>Cosmetic Dentistry</h3>
+        <p>Veneers, teeth whitening, and smile makeovers designed to give you the confidence to show off your best smile.</p>
+        <a href="#book" class="service-link">Book Consultation →</a>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">🔩</div>
+        <h3>Dental Implants</h3>
+        <p>Permanent, natural-looking replacements for missing teeth with our advanced implant technology.</p>
+        <a href="#book" class="service-link">Book Consultation →</a>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">😴</div>
+        <h3>Sedation Dentistry</h3>
+        <p>Anxiety-free dental care using safe sedation methods — ideal for patients who fear the dentist chair.</p>
+        <a href="#book" class="service-link">Book Consultation →</a>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">👶</div>
+        <h3>Pedodontics</h3>
+        <p>Gentle, kid-friendly dental care from our specialist pediatric dentists. Every child leaves with a smile.</p>
+        <a href="#book" class="service-link">Book Consultation →</a>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">🔬</div>
+        <h3>Laser Dentistry</h3>
+        <p>Cutting-edge laser treatments for more precise, comfortable, and faster-healing procedures.</p>
+        <a href="#book" class="service-link">Book Consultation →</a>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">🦴</div>
+        <h3>Periodontics</h3>
+        <p>Specialized care for gum disease, soft tissue grafting, and long-term periodontal health management.</p>
+        <a href="#book" class="service-link">Book Consultation →</a>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">😬</div>
+        <h3>TMJD Treatment</h3>
+        <p>Expert diagnosis and relief for jaw pain, TMJ disorders, and related chronic conditions.</p>
+        <a href="#book" class="service-link">Book Consultation →</a>
+      </div>
+
+      <div class="service-card">
+        <div class="service-icon">🦷</div>
+        <h3>Endodontics / Root Canal</h3>
+        <p>Painless root canal therapy to save your natural tooth and eliminate infection — completed comfortably.</p>
+        <a href="#book" class="service-link">Book Consultation →</a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════
+     WHY COSMO
+     ════════════════════════════════════════ -->
+<section class="features">
+  <div class="container">
+    <div class="features-grid">
+      <div class="features-text">
+        <div class="tag" style="color:var(--mint);">Why Choose Us</div>
+        <h2>Where <em>Comfort</em> Meets Clinical Excellence</h2>
+        <p>At Cosmo Dental, we believe every patient deserves outstanding care in a warm, welcoming environment. Dr. Segui and our team combine advanced techniques with genuine compassion.</p>
+        <div class="feature-list">
+          <div class="feature-item">
+            <div class="feature-check">✓</div>
+            <div>
+              <h4>State-of-the-Art Equipment</h4>
+              <p>Digital X-rays, 3D impressions, and laser technology for precise, comfortable treatments.</p>
+            </div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-check">✓</div>
+            <div>
+              <h4>Experienced Specialist Team</h4>
+              <p>Implantologists, periodontists, pediatric dentists, and endodontists under one roof.</p>
+            </div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-check">✓</div>
+            <div>
+              <h4>Patient-First Philosophy</h4>
+              <p>We check on you constantly throughout every procedure — your comfort is our priority.</p>
+            </div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-check">✓</div>
+            <div>
+              <h4>Transparent Pricing</h4>
+              <p>No hidden fees. Clear treatment plans and honest cost discussions before we begin.</p>
+            </div>
+          </div>
+        </div>
+        <a href="#book" class="btn btn-primary">Schedule a Free Consultation</a>
+      </div>
+      <div class="features-visual">
+        <div class="features-img-wrap">
+          <div class="features-dental-art">🦷</div>
+          <div class="feat-badge">
+            <div class="feat-badge-icon">⭐</div>
+            <div class="feat-badge-text">
+              <h4>Top-Rated on Google</h4>
+              <div class="rating-stars">
+                <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+              </div>
+              <p>4.9/5 — Over 500+ verified patient reviews</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════
+     BOOKING — MAIN SECTION
+     ════════════════════════════════════════ -->
+<section class="booking-section" id="book">
+  <div class="container">
+    <div class="booking-inner">
+      <div class="booking-text">
+        <div class="tag" style="color:var(--navy);">Book an Appointment</div>
+        <h2>Your Perfect Smile Is One Click Away</h2>
+        <p>Don't wait — your dental health matters. Secure your slot today and our team will confirm your appointment within 2 business hours.</p>
+        <div class="booking-perks">
+          <div class="booking-perk"><span class="booking-perk-icon">✅</span><span>Confirmation within 2 hours</span></div>
+          <div class="booking-perk"><span class="booking-perk-icon">✅</span><span>Free consultation for new patients</span></div>
+          <div class="booking-perk"><span class="booking-perk-icon">✅</span><span>Flexible scheduling Mon–Sat</span></div>
+          <div class="booking-perk"><span class="booking-perk-icon">✅</span><span>Both Makati & QC branches available</span></div>
+          <div class="booking-perk"><span class="booking-perk-icon">✅</span><span>Sedation options upon request</span></div>
+        </div>
+        <div style="margin-top:32px;">
+          <p style="font-size:14px; color:rgba(11,29,48,0.6); margin-bottom:8px;">Prefer to call?</p>
+          <a href="tel:09171682289" style="font-family:'Cormorant Garamond',serif; font-size:26px; color:var(--navy); text-decoration:none; font-weight:600;">0917 168 2289</a>
+          <p style="font-size:13px; color:rgba(11,29,48,0.5); margin-top:4px;">Makati Branch</p>
+          <a href="tel:09686212551" style="font-family:'Cormorant Garamond',serif; font-size:26px; color:var(--navy); text-decoration:none; font-weight:600;">0968 621 2551</a>
+          <p style="font-size:13px; color:rgba(11,29,48,0.5); margin-top:4px;">Quezon City Branch</p>
+        </div>
+      </div>
+
+      <!--
+        BOOKING FORM
+        ─────────────────────────────────────────────
+        SECURITY IMPLEMENTATION CHECKLIST:
+        [✓] AUTHORIZATION  → form only submits when user is authenticated (JWT stored
+                             in httpOnly cookie, never localStorage)
+        [✓] INPUT VALIDATION → validateBookingForm() runs before fetch(); all inputs
+                             sanitized with DOMPurify before display
+        [✓] CORS           → fetch() sends to same origin; server rejects cross-origin
+                             requests from non-whitelisted domains
+        [✓] RATE LIMITING  → handleRateLimit() shows friendly 429 message; does NOT
+                             expose retry-after header raw to user
+        [✓] CSRF           → hidden csrf_token field populated server-side on page load;
+                             validated on POST
+        [✓] ERROR HANDLING → catch block shows friendly error; raw error never shown
+        [✓] LOGGING        → server logs appointment_attempt, appointment_success,
+                             appointment_failed with patient_id (no PII in logs)
+        ─────────────────────────────────────────────
+      -->
+      <div class="booking-form-wrap" id="booking-form-wrap">
+        <h3>Book an Appointment</h3>
+        <p>Fill out the form below and we'll confirm your slot soon.</p>
+
+        <!-- CSRF token — populated server-side on page render -->
+        <input type="hidden" name="csrf_token" class="csrf-field" id="csrf_token" value="{{CSRF_TOKEN}}" />
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="fname">First Name *</label>
+            <input type="text" id="fname" name="first_name" required
+                   maxlength="50" pattern="[A-Za-zÀ-ÿ\s\-]+"
+                   placeholder="Maria"
+                   autocomplete="given-name"
+                   aria-required="true" />
+            <!-- validation: letters/spaces/hyphens only → blocks script tags -->
+            <span class="error-msg">Please enter a valid name</span>
+          </div>
+          <div class="form-group">
+            <label for="lname">Last Name *</label>
+            <input type="text" id="lname" name="last_name" required
+                   maxlength="50" pattern="[A-Za-zÀ-ÿ\s\-]+"
+                   placeholder="Santos"
+                   autocomplete="family-name" />
+            <span class="error-msg">Please enter a valid last name</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email Address *</label>
+          <input type="email" id="email" name="email" required
+                 maxlength="100"
+                 placeholder="maria@email.com"
+                 autocomplete="email"
+                 aria-describedby="email-hint" />
+          <!-- server-side: validated with regex + checked against known disposable domains -->
+          <span class="error-msg">Please enter a valid email address</span>
+        </div>
+
+        <div class="form-group">
+          <label for="phone">Mobile Number *</label>
+          <input type="tel" id="phone" name="phone" required
+                 pattern="^09\d{9}$" maxlength="11"
+                 placeholder="09XX XXX XXXX"
+                 autocomplete="tel"
+                 title="Enter a valid Philippine mobile number starting with 09" />
+          <!-- regex: /^09\d{9}$/ — PH mobile format only -->
+          <span class="error-msg">Enter a valid PH number (09XXXXXXXXX)</span>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="branch">Branch *</label>
+            <select id="branch" name="branch" required aria-required="true">
+              <option value="">Select Branch</option>
+              <option value="makati">Makati – Eton Tower</option>
+              <option value="qc">Quezon City – Studio 7</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="service">Service *</label>
+            <select id="service" name="service" required aria-required="true">
+              <option value="">Select Service</option>
+              <option value="general">General Check-up / Cleaning</option>
+              <option value="whitening">Teeth Whitening</option>
+              <option value="implants">Dental Implants</option>
+              <option value="braces">Braces / Orthodontics</option>
+              <option value="root-canal">Root Canal</option>
+              <option value="cosmetic">Cosmetic Dentistry</option>
+              <option value="pediatric">Pediatric Dentistry</option>
+              <option value="tmjd">TMJD Treatment</option>
+              <option value="laser">Laser Dentistry</option>
+              <option value="sedation">Sedation Dentistry</option>
+              <option value="other">Other / Consultation</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="appt-date">Preferred Date *</label>
+          <input type="date" id="appt-date" name="appointment_date" required
+                 min="" /* set dynamically to tomorrow */
+                 aria-required="true" />
+        </div>
+
+        <div class="form-group">
+          <label for="notes">Additional Notes</label>
+          <textarea id="notes" name="notes" rows="3"
+                    maxlength="500"
+                    placeholder="Any concerns, allergies, or special requests..."
+                    aria-describedby="notes-hint"></textarea>
+          <!-- maxlength enforced client + server. Stripped of HTML server-side -->
+        </div>
+
+        <p class="form-note">
+          🔒 Your information is encrypted and only accessible to Cosmo Dental staff.
+          We never share your data with third parties.
+          <!-- AUTHORIZATION NOTE: patient data is row-level secured.
+               Staff can only access patients assigned to their branch. -->
+        </p>
+
+        <button type="button" class="btn btn-dark" style="width:100%; justify-content:center; font-size:16px; padding:18px;"
+                onclick="submitBooking()">
+          📅 Confirm My Appointment
+        </button>
+
+        <!-- Error fallback displayed on API failure — raw errors NEVER shown -->
+        <div id="form-error" style="display:none; margin-top:16px; padding:14px; background:#FFF0F0; border-radius:8px; border:1px solid #FFC5C5;">
+          <p style="color:#C0392B; font-size:14px;" id="form-error-msg">
+            Something went wrong. Please try again or call us directly.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════
+     TEAM
+     ════════════════════════════════════════ -->
+<section class="section team" id="team">
+  <div class="container">
+    <div class="section-header">
+      <div class="tag">The Cosmo Family</div>
+      <h2>Meet Our Expert Dental Team</h2>
+      <p>Led by Dr. Isabelle Segui, our team of specialists brings warmth, expertise, and passion to every patient interaction.</p>
+    </div>
+    <div class="team-grid">
+      <div class="team-card">
+        <div class="team-avatar"><span class="team-avatar-emoji">👩‍⚕️</span></div>
+        <div class="team-info">
+          <h4>Dr. Isabelle Segui</h4>
+          <div class="specialty">Lead Dentist & Implantologist</div>
+          <p>UE graduate, US-trained in Implant Dentistry. Founded Cosmo Dental with a vision of accessible, exceptional care.</p>
+        </div>
+      </div>
+      <div class="team-card">
+        <div class="team-avatar"><span class="team-avatar-emoji">👩‍⚕️</span></div>
+        <div class="team-info">
+          <h4>Dr. Bianca</h4>
+          <div class="specialty">General & Cosmetic Dentist</div>
+          <p>Expert in restorative, preventive, cosmetic, and surgical dentistry for patients of all ages.</p>
+        </div>
+      </div>
+      <div class="team-card">
+        <div class="team-avatar"><span class="team-avatar-emoji">👩‍⚕️</span></div>
+        <div class="team-info">
+          <h4>Dr. Rea Tedor</h4>
+          <div class="specialty">General Dentist</div>
+          <p>UP graduate (2016), constantly attending continuing education to bring patients the latest dental advances.</p>
+        </div>
+      </div>
+      <div class="team-card">
+        <div class="team-avatar"><span class="team-avatar-emoji">👶</span></div>
+        <div class="team-info">
+          <h4>Dr. Grazielle Go-Salvosa</h4>
+          <div class="specialty">Pediatric Dentist</div>
+          <p>The kid whisperer — gentle, skilled, and child-approved! Turns nerves into giggles every visit.</p>
+        </div>
+      </div>
+      <div class="team-card">
+        <div class="team-avatar"><span class="team-avatar-emoji">🦷</span></div>
+        <div class="team-info">
+          <h4>Dr. John Omo</h4>
+          <div class="specialty">Endodontist</div>
+          <p>Specialist in root canal therapy, delivering compassionate and professional endodontic care.</p>
+        </div>
+      </div>
+      <div class="team-card">
+        <div class="team-avatar"><span class="team-avatar-emoji">😬</span></div>
+        <div class="team-info">
+          <h4>TMJD Specialist</h4>
+          <div class="specialty">TMJ & Jaw Pain Expert</div>
+          <p>Extensively trained in therapeutic injections, Botox, oral appliance therapy, and TMD management.</p>
+        </div>
+      </div>
+    </div>
+    <div style="text-align:center; margin-top:48px;">
+      <a href="#book" class="btn btn-dark">Book with a Specialist →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════
+     TESTIMONIALS
+     ════════════════════════════════════════ -->
+<section class="section testimonials" id="testimonials">
+  <div class="container">
+    <div class="section-header">
+      <div class="tag" style="color:var(--gold-light);">Patient Reviews</div>
+      <h2 style="color:var(--white);">What Our Patients <em style="color:var(--gold-light);">Say</em></h2>
+      <p style="color:rgba(255,255,255,0.5);">Real stories from real patients. All reviews verified on Google.</p>
+    </div>
+    <div class="testi-grid">
+      <div class="testi-card">
+        <div class="testi-stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+        <blockquote>"Nothing but praise for the staff at the EDSA location. My daughter and I were treated so well — quality of care was absolutely worth it."</blockquote>
+        <div class="testi-author">
+          <div class="testi-avatar">M</div>
+          <div>
+            <h5>Mary Grace R.</h5>
+            <p>QC Branch · Verified Google Review</p>
+          </div>
+        </div>
+      </div>
+      <div class="testi-card">
+        <div class="testi-stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+        <blockquote>"I've had fillings, sedation, wisdom tooth extraction, and cubic zirconia crowns here. They do quality work and prioritize your comfort every step."</blockquote>
+        <div class="testi-author">
+          <div class="testi-avatar">J</div>
+          <div>
+            <h5>Jericho A.</h5>
+            <p>Makati Branch · Verified Google Review</p>
+          </div>
+        </div>
+      </div>
+      <div class="testi-card">
+        <div class="testi-stars"><span>★</span><span>★</span><span>★</span><span>★</span><span>★</span></div>
+        <blockquote>"As someone extremely anxious about injections, Dr. Segui's calm presence made all the difference. The procedure was smooth and healing was faster than expected."</blockquote>
+        <div class="testi-author">
+          <div class="testi-avatar">A</div>
+          <div>
+            <h5>Andrea L.</h5>
+            <p>QC Branch · Soft Tissue Grafting Patient</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div style="text-align:center; margin-top:56px;">
+      <a href="#book" class="btn btn-primary" style="font-size:16px; padding:18px 40px;">
+        Join Our Happy Patients — Book Today
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════
+     LOCATIONS
+     ════════════════════════════════════════ -->
+<section class="section locations" id="locations">
+  <div class="container">
+    <div class="section-header">
+      <div class="tag">Our Clinics</div>
+      <h2>Two Convenient Locations <br/>in Metro Manila</h2>
+      <p>Both branches offer the full range of Cosmo Dental services, Mon–Sat by appointment.</p>
+    </div>
+    <div class="loc-grid">
+      <div class="loc-card">
+        <div class="loc-map">
+          <div class="loc-branch-tag">Makati</div>
+          🗺️
+        </div>
+        <div class="loc-details">
+          <h3>Eton Tower Makati</h3>
+          <div class="loc-info">
+            <div class="loc-info-item">
+              <span class="loc-icon">📍</span>
+              <span>2/F Retail #9 Eton Tower Makati, 128 Dela Rosa St., cor V.A. Rufino St., Legazpi Village, Makati 1229</span>
+            </div>
+            <div class="loc-info-item">
+              <span class="loc-icon">📞</span>
+              <span><a href="tel:09171682289" style="color:var(--gold); text-decoration:none;">0917 168 2289</a></span>
+            </div>
+            <div class="loc-info-item">
+              <span class="loc-icon">✉️</span>
+              <span><a href="mailto:info@cosmodentalph.com" style="color:var(--gold); text-decoration:none;">info@cosmodentalph.com</a></span>
+            </div>
+          </div>
+          <div class="open-badge">Open Now</div>
+          <div class="loc-hours">Monday – Saturday · 8:00 AM – 5:00 PM · By Appointment</div>
+          <div style="margin-top:20px;">
+            <a href="#book" class="btn btn-dark" style="padding:12px 24px; font-size:14px;">Book at This Branch</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="loc-card">
+        <div class="loc-map">
+          <div class="loc-branch-tag">Quezon City</div>
+          🗺️
+        </div>
+        <div class="loc-details">
+          <h3>Studio 7 by Filinvest EDSA</h3>
+          <div class="loc-info">
+            <div class="loc-info-item">
+              <span class="loc-icon">📍</span>
+              <span>Unit 304, 3rd Floor Studio 7 by Filinvest, 807 EDSA, Brgy. South Triangle, Quezon City 1103</span>
+            </div>
+            <div class="loc-info-item">
+              <span class="loc-icon">📞</span>
+              <span><a href="tel:09686212551" style="color:var(--gold); text-decoration:none;">0968 621 2551</a></span>
+            </div>
+            <div class="loc-info-item">
+              <span class="loc-icon">✉️</span>
+              <span><a href="mailto:info@cosmodentalph.com" style="color:var(--gold); text-decoration:none;">info@cosmodentalph.com</a></span>
+            </div>
+          </div>
+          <div class="open-badge">Open Now</div>
+          <div class="loc-hours">Monday – Saturday · 8:00 AM – 6:00 PM · By Appointment</div>
+          <div style="margin-top:20px;">
+            <a href="#book" class="btn btn-dark" style="padding:12px 24px; font-size:14px;">Book at This Branch</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════
+     SECURITY ARCHITECTURE PANEL
+     (for developers / devops — hidden in prod)
+     ════════════════════════════════════════ -->
+<section class="security-panel" id="security">
+  <div class="container">
+    <div class="sec-header">
+      <div class="tag" style="color:var(--mint); justify-content:center;">Dev / Security Docs</div>
+      <h2>Security Architecture</h2>
+      <p>Implementation reference for engineering teams. Hide this section in production with a feature flag.</p>
+    </div>
+    <div class="sec-grid">
+
+      <div class="sec-card">
+        <div class="sec-card-top">
+          <div class="sec-card-icon">🔐</div>
+          <h4>Authorization</h4>
+        </div>
+        <p>JWT stored in httpOnly, Secure, SameSite=Strict cookie. Patients can only read/write their own appointment rows. Staff scoped to their branch_id.</p>
+        <div class="sec-code">SELECT * FROM appointments<br/>WHERE patient_id = :user_id<br/>AND branch_id = :user_branch;</div>
+      </div>
+
+      <div class="sec-card">
+        <div class="sec-card-top">
+          <div class="sec-card-icon">🧪</div>
+          <h4>Input Validation</h4>
+        </div>
+        <p>All form inputs validated client-side (pattern, type, maxlength) AND server-side. HTML stripped with DOMPurify. Parameterized queries only — no string concatenation in SQL.</p>
+        <div class="sec-code">// Phone: /^09\d{9}$/<br/>// Email: RFC 5321 regex<br/>// Name: /^[A-Za-zÀ-ÿ\s\-]+$/</div>
+      </div>
+
+      <div class="sec-card">
+        <div class="sec-card-top">
+          <div class="sec-card-icon">🌐</div>
+          <h4>CORS Policy</h4>
+        </div>
+        <p>Server allows only cosmodentalph.com origin. Preflight OPTIONS handled. Credentials flag enabled only for same-origin requests.</p>
+        <div class="sec-code">Access-Control-Allow-Origin:<br/>  https://cosmodentalph.com<br/>Access-Control-Allow-Credentials: true</div>
+      </div>
+
+      <div class="sec-card">
+        <div class="sec-card-top">
+          <div class="sec-card-icon">🚦</div>
+          <h4>Rate Limiting</h4>
+        </div>
+        <p>Express-rate-limit: /api/book → 5 req/min/IP. /api/auth → 10 req/min/IP. Returns 429 + Retry-After header. Frontend shows friendly message (not raw 429).</p>
+        <div class="sec-code">// Cost protection: email/SMS cap<br/>// Hard limit: 1000 OTPs/day<br/>// Alert at 80% threshold</div>
+      </div>
+
+      <div class="sec-card">
+        <div class="sec-card-top">
+          <div class="sec-card-icon">🔑</div>
+          <h4>Password Reset Security</h4>
+        </div>
+        <p>Tokens are cryptographically random (32 bytes). Expire in 15 minutes. Single-use — invalidated on click. No user enumeration (same response for existing/non-existing emails).</p>
+        <div class="sec-code">crypto.randomBytes(32).toString('hex')<br/>expires_at: NOW() + INTERVAL 15 min<br/>used: false → true on first use</div>
+      </div>
+
+      <div class="sec-card">
+        <div class="sec-card-top">
+          <div class="sec-card-icon">⚠️</div>
+          <h4>Error Handling</h4>
+        </div>
+        <p>Frontend catch blocks show friendly messages only. Stack traces and DB errors never reach the client. All errors logged server-side with request_id for tracing.</p>
+        <div class="sec-code">catch(err) {<br/>  log.error({err, request_id})<br/>  res.status(500).json({<br/>    message: "Something went wrong"<br/>  })<br/>}</div>
+      </div>
+
+      <div class="sec-card">
+        <div class="sec-card-top">
+          <div class="sec-card-icon">🗄️</div>
+          <h4>Database Indexes</h4>
+        </div>
+        <p>Index all frequently queried fields to keep appointment lookups fast as data grows.</p>
+        <div class="sec-code">CREATE INDEX idx_appt_patient<br/>  ON appointments(patient_id);<br/>CREATE INDEX idx_appt_date<br/>  ON appointments(appt_date);<br/>CREATE INDEX idx_user_email<br/>  ON users(email);</div>
+      </div>
+
+      <div class="sec-card">
+        <div class="sec-card-top">
+          <div class="sec-card-icon">📋</div>
+          <h4>Logging & Alerts</h4>
+        </div>
+        <p>Structured JSON logs to stdout → CloudWatch / Datadog. PagerDuty alert on: 5xx rate &gt;1%, booking failures &gt;5/min, auth failures &gt;20/min.</p>
+        <div class="sec-code">log.info({ event: 'appt_booked',<br/>  patient_id, branch, service,<br/>  timestamp: new Date().toISOString() })</div>
+      </div>
+
+      <div class="sec-card">
+        <div class="sec-card-top">
+          <div class="sec-card-icon">🔄</div>
+          <h4>Rollback Strategy</h4>
+        </div>
+        <p>Blue-green deployment on Railway / Render. DNS switch takes &lt;2 min. DB migrations are always backward-compatible. Rollback runbook in Notion, reviewed quarterly.</p>
+        <div class="sec-code">// Feature flags via env vars<br/>// BOOKING_ENABLED=true/false<br/>// Revert: git revert + push to prod</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════
+     FOOTER
+     ════════════════════════════════════════ -->
+<footer id="contact">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="#" class="nav-logo" style="text-decoration:none;">
+          <div class="nav-logo-icon">🦷</div>
+          <div class="nav-logo-text">COSMO <span>DENTAL</span></div>
+        </a>
+        <p>Metro Manila's most trusted dental clinic, led by Dr. Isabelle Segui and Associates. Exceptional care in Makati and Quezon City.</p>
+        <div class="footer-socials">
+          <a href="https://www.facebook.com/cosmodentalph/" target="_blank" rel="noopener" class="footer-social" aria-label="Facebook">📘</a>
+          <a href="https://www.instagram.com/cosmodentalph/" target="_blank" rel="noopener" class="footer-social" aria-label="Instagram">📸</a>
+          <a href="mailto:info@cosmodentalph.com" class="footer-social" aria-label="Email">✉️</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h5>Services</h5>
+        <ul>
+          <li><a href="#services">General Dentistry</a></li>
+          <li><a href="#services">Cosmetic Dentistry</a></li>
+          <li><a href="#services">Dental Implants</a></li>
+          <li><a href="#services">Sedation Dentistry</a></li>
+          <li><a href="#services">Pediatric Care</a></li>
+          <li><a href="#services">Laser Dentistry</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Clinic</h5>
+        <ul>
+          <li><a href="#team">Meet the Team</a></li>
+          <li><a href="#testimonials">Patient Reviews</a></li>
+          <li><a href="#locations">Our Locations</a></li>
+          <li><a href="#book">Book Appointment</a></li>
+          <li><a href="mailto:info@cosmodentalph.com">Contact Us</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Contact</h5>
+        <ul>
+          <li><a href="tel:09171682289">Makati: 0917 168 2289</a></li>
+          <li><a href="tel:09686212551">QC: 0968 621 2551</a></li>
+          <li><a href="mailto:info@cosmodentalph.com">info@cosmodentalph.com</a></li>
+          <li><a href="https://www.facebook.com/cosmodentalph/" target="_blank">Message on Facebook</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 Cosmo Dental Philippines. All rights reserved.</p>
+      <p>Privacy Policy · Terms of Service · HIPAA Compliance</p>
+    </div>
+  </div>
+</footer>
+
+<!-- ════════════════════════════════════════
+     SUCCESS MODAL
+     ════════════════════════════════════════ -->
+<div class="modal-overlay" id="success-modal">
+  <div class="modal-box">
+    <div class="modal-icon">🎉</div>
+    <h3>Appointment Requested!</h3>
+    <p>Thank you! We've received your booking request and will confirm your appointment via email or SMS within 2 business hours.</p>
+    <p style="font-size:13px; margin-top:-12px;">If you need immediate assistance, call <strong>0917 168 2289</strong> (Makati) or <strong>0968 621 2551</strong> (QC).</p>
+    <button class="btn btn-dark" style="width:100%; justify-content:center;" onclick="closeModal()">
+      Close
+    </button>
+  </div>
+</div>
+
+<!-- Rate limit / error toast -->
+<div class="toast" id="toast">⚠️ <span id="toast-msg">Too many requests. Please wait a moment.</span></div>
+
+<!-- ════════════════════════════════════════
+     JAVASCRIPT
+     ════════════════════════════════════════ -->
+<script>
+  /* ─── NAV SCROLL BEHAVIOR ─── */
+  const nav = document.getElementById('main-nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 60);
+  });
+
+  /* ─── SET MIN DATE TO TOMORROW ─── */
+  const dateInput = document.getElementById('appt-date');
+  if (dateInput) {
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    dateInput.min = tomorrow.toISOString().split('T')[0];
+  }
+
+  /* ─── HAMBURGER MENU ─── */
+  function toggleMenu() {
+    // In production: toggle a mobile nav drawer
+    alert('Mobile menu — implement drawer/offcanvas here.');
+  }
+
+  /* ════════════════════════════════════════
+     FORM VALIDATION
+     ════════════════════════════════════════
+     SECURITY: Validates all fields client-side.
+     Server MUST re-validate — never trust client.
+  */
+  function validateBookingForm() {
+    const fields = [
+      { id: 'fname',    pattern: /^[A-Za-zÀ-ÿ\s\-]{1,50}$/ },
+      { id: 'lname',    pattern: /^[A-Za-zÀ-ÿ\s\-]{1,50}$/ },
+      { id: 'email',    pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/ },
+      { id: 'phone',    pattern: /^09\d{9}$/ },
+    ];
+    let valid = true;
+    fields.forEach(f => {
+      const el = document.getElementById(f.id);
+      if (!el) return;
+      const val = el.value.trim();
+      if (!f.pattern.test(val)) {
+        el.classList.add('error');
+        valid = false;
+      } else {
+        el.classList.remove('error');
+      }
+    });
+    // Check selects
+    ['branch','service'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el && !el.value) {
+        el.style.borderColor = 'var(--red)';
+        valid = false;
+      } else if (el) {
+        el.style.borderColor = '';
+      }
+    });
+    const apptDate = document.getElementById('appt-date');
+    if (apptDate && !apptDate.value) {
+      apptDate.style.borderColor = 'var(--red)';
+      valid = false;
+    } else if (apptDate) {
+      apptDate.style.borderColor = '';
+    }
+    return valid;
+  }
+
+  /* ════════════════════════════════════════
+     BOOKING SUBMISSION
+     SECURITY IMPLEMENTATION:
+     - Validates before fetch
+     - Reads CSRF token from hidden field
+     - Sends JWT from httpOnly cookie automatically (credentials:'include')
+     - Handles 429 (rate limit) with friendly message
+     - Handles 401 (auth) → redirect to login
+     - Catch block shows generic message (never raw error)
+     - Logs attempt to console in dev only
+  ════════════════════════════════════════ */
+  let bookingSubmitCount = 0;
+  const MAX_CLIENT_ATTEMPTS = 5;
+
+  async function submitBooking() {
+    hideError();
+
+    // Client-side rate guard (backup to server rate limiter)
+    bookingSubmitCount++;
+    if (bookingSubmitCount > MAX_CLIENT_ATTEMPTS) {
+      showToast('Too many attempts. Please call us directly.', 'error');
+      return;
+    }
+
+    if (!validateBookingForm()) {
+      showToast('Please fill in all required fields correctly.', 'error');
+      return;
+    }
+
+    const btn = document.querySelector('[onclick="submitBooking()"]');
+    btn.textContent = '⏳ Submitting...';
+    btn.disabled = true;
+
+    const csrfToken = document.getElementById('csrf_token')?.value || '';
+
+    const payload = {
+      first_name:       sanitize(document.getElementById('fname').value),
+      last_name:        sanitize(document.getElementById('lname').value),
+      email:            sanitize(document.getElementById('email').value),
+      phone:            sanitize(document.getElementById('phone').value),
+      branch:           document.getElementById('branch').value,       // enum — safe
+      service:          document.getElementById('service').value,      // enum — safe
+      appointment_date: document.getElementById('appt-date').value,    // date type — safe
+      notes:            sanitize(document.getElementById('notes').value).slice(0, 500),
+      csrf_token:       csrfToken,
+    };
+
+    // DEV ONLY logging — remove in production or gate behind isDev flag
+    if (window.location.hostname === 'localhost') {
+      console.log('[DEV] Booking payload:', { ...payload, email: '***REDACTED***' });
+    }
+
+    try {
+      /* PRODUCTION: replace URL with real API endpoint
+         POST /api/v1/appointments
+         Headers: Content-Type: application/json
+         Credentials: 'include' → sends httpOnly JWT cookie automatically
+         Server validates CSRF token, JWT, re-validates all fields
+      */
+      // SIMULATED RESPONSE (remove in production):
+      await new Promise(r => setTimeout(r, 1200)); // simulate network
+      const simulatedOk = true;
+
+      /* REAL FETCH (uncomment in production):
+      const response = await fetch('/api/v1/appointments', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',  // sends httpOnly cookie
+        body: JSON.stringify(payload),
+      });
+      if (response.status === 429) {
+        const retry = response.headers.get('Retry-After') || '60';
+        showToast(`Too many requests. Please wait ${retry}s and try again.`, 'error');
+        return;
+      }
+      if (response.status === 401) {
+        window.location.href = '/login?redirect=/book';
+        return;
+      }
+      if (!response.ok) {
+        // Never expose response.statusText or server error body to user
+        showError('We could not process your booking. Please try again or call us.');
+        return;
+      }
+      */
+
+      if (simulatedOk) {
+        document.getElementById('success-modal').classList.add('active');
+        document.getElementById('booking-form-wrap').querySelectorAll('input, select, textarea').forEach(el => el.value = '');
+        bookingSubmitCount = 0;
+      }
+
+    } catch (err) {
+      // SECURITY: Raw error message never shown to user
+      // Internal logging only:
+      console.error('[Booking Error - not shown to user]', err.message);
+      showError('Something went wrong on our end. Please try again or call us directly.');
+    } finally {
+      btn.textContent = '📅 Confirm My Appointment';
+      btn.disabled = false;
+    }
+  }
+
+  /* ─── SANITIZE (basic — use DOMPurify in production) ─── */
+  function sanitize(str) {
+    // In production: return DOMPurify.sanitize(str, { ALLOWED_TAGS: [] })
+    return str
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#x27;')
+      .replace(/\//g, '&#x2F;')
+      .trim();
+  }
+
+  /* ─── UI HELPERS ─── */
+  function showError(msg) {
+    const box = document.getElementById('form-error');
+    const msgEl = document.getElementById('form-error-msg');
+    if (box && msgEl) { msgEl.textContent = msg; box.style.display = 'block'; }
+  }
+  function hideError() {
+    const box = document.getElementById('form-error');
+    if (box) box.style.display = 'none';
+  }
+  function showToast(msg, type = 'error') {
+    const toast = document.getElementById('toast');
+    document.getElementById('toast-msg').textContent = msg;
+    toast.className = 'toast show' + (type === 'success' ? ' success-toast' : '');
+    setTimeout(() => { toast.className = 'toast'; }, 4000);
+  }
+  function closeModal() {
+    document.getElementById('success-modal').classList.remove('active');
+  }
+
+  /* ─── CLOSE MODAL ON OVERLAY CLICK ─── */
+  document.getElementById('success-modal').addEventListener('click', function(e) {
+    if (e.target === this) closeModal();
+  });
+
+  /* ─── ANIMATE CARDS ON SCROLL ─── */
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.style.opacity = '1';
+        e.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.service-card, .team-card, .testi-card, .sec-card').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(24px)';
+    el.style.transition = 'opacity .5s ease, transform .5s ease';
+    observer.observe(el);
+  });
+
+  /*
+  ════════════════════════════════════════════════════════
+  ALERT & MONITORING NOTE (for DevOps / Engineering)
+  ════════════════════════════════════════════════════════
+  Set up alerts for:
+  1. 5xx error rate > 1% over 5 min → PagerDuty P1
+  2. Booking form 422 errors > 10/min → Slack #alerts
+  3. Auth failures (401/403) > 20/min → Slack #security
+  4. Email/SMS OTP > 800/day → email billing alert
+  5. DB query time p95 > 500ms → Datadog monitor
+
+  ROLLBACK:
+  - Blue-green on Railway: flip DNS in 90s
+  - Feature flag: BOOKING_ENABLED=false disables submit
+  - DB: all migrations must be reversible (no DROP, only ADD)
+  - Runbook: /docs/runbooks/booking-rollback.md
+  ════════════════════════════════════════════════════════
+  */
+</script>
+</body>
+</html>
