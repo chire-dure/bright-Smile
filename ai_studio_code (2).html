@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Dental Business | Metro Manila's Most Trusted Smile Experts</title>
+    <meta name="description" content="Experience world-class dentistry at Your Dental Business in Metro Manila. Lead by Dr. Ivan Mark Escudero, offering implants, cosmetic care, and oral surgery.">
+    
+    <!-- Open Graph Tags -->
+    <meta property="og:title" content="Your Dental Business | Metro Manila's Top Clinic">
+    <meta property="og:description" content="World-class dentistry in the heart of Metro Manila. 5,000+ happy patients and 4.9★ rating.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://yourdentalbusiness.com">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&family=DM+Sans:wght@300;400;500;600&family=Space+Mono&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --navy: #0B1D30;
+            --navy-mid: #132840;
+            --ivory: #F9F6F1;
+            --ivory-2: #F0EBE2;
+            --gold: #BF9B5A;
+            --gold-light: #D4B578;
+            --mint: #2ABEAA;
+            --mint-light: #E6FAF8;
+            --text: #1A2E42;
+            --text-muted: #6B7E8F;
+            --red: #D94F4F;
+            --radius: 12px;
+            --radius-lg: 24px;
+            --shadow: 0 4px 32px rgba(11,29,48,0.12);
+            --shadow-lg: 0 16px 64px rgba(11,29,48,0.18);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'DM Sans', sans-serif; background: var(--ivory); color: var(--text); line-height: 1.6; overflow-x: hidden; }
+        
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: var(--ivory-2); }
+        ::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 10px; }
+
+        h1, h2, h3, h4 { font-family: 'Cormorant Garamond', serif; }
+        a { text-decoration: none; transition: 0.3s; color: inherit; }
+        ul { list-style: none; }
+        section { padding: 100px 0; position: relative; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 32px; }
+
+        .tag { font-family: 'Space Mono', monospace; text-transform: uppercase; font-size: 12px; color: var(--gold); display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+        .tag::before { content: ""; width: 28px; height: 1px; background: var(--gold); }
+
+        /* Buttons */
+        .btn { 
+            display: inline-flex; align-items: center; justify-content: center; 
+            padding: 14px 28px; border-radius: 50px; font-weight: 600; font-size: 15px; 
+            cursor: pointer; position: relative; overflow: hidden; transition: 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            min-height: 44px; border: none;
+        }
+        .btn::after { 
+            content: ""; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; 
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: 0.5s;
+        }
+        .btn:hover::after { left: 100%; }
+        .btn:hover { transform: translateY(-2px); }
+
+        .btn-primary { background: var(--gold); color: var(--navy); }
+        .btn-primary:hover { box-shadow: 0 0 20px rgba(191, 155, 90, 0.4); }
+        .btn-outline { background: transparent; border: 1px solid rgba(255,255,255,0.3); color: white; }
+        .btn-outline:hover { border-color: var(--gold); color: var(--gold); }
+        .btn-dark { background: var(--navy); color: white; }
+        .btn-dark:hover { box-shadow: 0 8px 24px rgba(11, 29, 48, 0.25); }
+        .btn-small { padding: 8px 20px; font-size: 13px; }
+
+        /* Navigation */
+        nav { 
+            position: fixed; top: 0; width: 100%; height: 72px; z-index: 1000; 
+            display: flex; align-items: center; justify-content: space-between; 
+            padding: 0 48px; transition: 0.4s;
+        }
+        nav.scrolled { background: rgba(11, 29, 48, 0.97); backdrop-filter: blur(16px); box-shadow: var(--shadow); }
+        .logo { display: flex; align-items: center; gap: 12px; }
+        .logo-icon { width: 40px; height: 40px; background: var(--gold); border-radius: 10px; display: grid; place-items: center; font-size: 20px; }
+        .logo-text { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 700; color: white; }
+        .logo-text span { color: var(--gold-light); }
+        
+        .nav-links { display: flex; gap: 32px; }
+        .nav-links a { font-size: 14px; font-weight: 500; color: rgba(255,255,255,0.8); }
+        .nav-links a:hover { color: var(--gold-light); }
+        
+        .nav-actions { display: flex; align-items: center; gap: 16px; }
+
+        .hamburger { display: none; cursor: pointer; flex-direction: column; gap: 6px; }
+        .hamburger span { width: 24px; height: 2px; background: white; transition: 0.3s; }
+
+        /* Mobile Menu */
+        .mobile-drawer { 
+            position: fixed; top: -100%; left: 0; width: 100%; background: var(--navy); 
+            padding: 100px 32px 40px; transition: 0.5s; z-index: 999; display: flex; flex-direction: column; gap: 24px;
+        }
+        .mobile-drawer.active { top: 0; }
+        .mobile-drawer a { font-size: 24px; font-family: 'Cormorant Garamond', serif; color: white; }
+
+        /* Floating Button */
+        .floating-book { 
+            position: fixed; bottom: 32px; left: 32px; z-index: 998; 
+            background: var(--gold); color: var(--navy); padding: 14px 24px; 
+            border-radius: 50px; font-weight: 700; box-shadow: var(--shadow-lg);
+            animation: bounce 3s infinite ease-in-out;
+        }
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+
+        /* Hero */
+        .hero { 
+            height: 100vh; background: var(--navy); display: flex; align-items: center; 
+            overflow: hidden; padding-top: 72px;
+        }
+        .hero-bg-layer { position: absolute; inset: 0; pointer-events: none; }
+        .glow-mint { background: radial-gradient(circle at 70% 50%, rgba(42, 190, 170, 0.15) 0%, transparent 50%); }
+        .glow-gold { background: radial-gradient(circle at 10% 80%, rgba(191, 155, 90, 0.1) 0%, transparent 50%); }
+        .grid-overlay { background-size: 60px 60px; background-image: linear-gradient(to right, rgba(191, 155, 90, 0.06) 1px, transparent 1px), linear-gradient(to bottom, rgba(191, 155, 90, 0.06) 1px, transparent 1px); }
+        .floating-tooth { position: absolute; right: -100px; top: 10%; width: 680px; opacity: 0.06; animation: rotate 8s infinite alternate ease-in-out; }
+        @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(4deg); } }
+
+        .hero-content { position: relative; z-index: 2; width: 60%; transform: translateY(30px); opacity: 0; animation: fadeInUp 0.8s forwards 0.2s; }
+        .hero-content h1 { font-size: clamp(52px, 6vw, 88px); color: white; line-height: 1; margin: 24px 0; }
+        .hero-content h1 i { color: var(--gold); font-style: italic; }
+        .hero-content p { font-size: 18px; color: rgba(255,255,255,0.65); max-width: 520px; margin-bottom: 40px; }
+        
+        .hero-badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(191, 155, 90, 0.15); color: var(--gold-light); padding: 8px 16px; border-radius: 50px; font-size: 13px; font-weight: 600; border: 1px solid rgba(191,155,90,0.3); }
+        .pulse { width: 8px; height: 8px; background: var(--gold); border-radius: 50%; box-shadow: 0 0 0 rgba(191, 155, 90, 0.4); animation: pulse 2s infinite; }
+        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(191, 155, 90, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(191, 155, 90, 0); } 100% { box-shadow: 0 0 0 0 rgba(191, 155, 90, 0); } }
+
+        .hero-stats { margin-top: 64px; padding-top: 32px; border-top: 1px solid rgba(255,255,255,0.1); display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; opacity: 0; animation: fadeInUp 0.8s forwards 0.6s; }
+        .stat-item h3 { font-size: 44px; color: var(--gold-light); line-height: 1; margin-bottom: 4px; }
+        .stat-item p { font-size: 13px; text-transform: uppercase; letter-spacing: 1px; color: rgba(255,255,255,0.4); margin-bottom: 0; }
+
+        /* Quick Book Card */
+        .hero-card { 
+            position: absolute; right: 32px; top: 55%; transform: translateY(-50%) translateX(40px); 
+            background: rgba(255,255,255,0.06); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.12);
+            padding: 40px; border-radius: var(--radius-lg); width: 380px; z-index: 3; opacity: 0; animation: fadeInRight 0.8s forwards 0.5s;
+        }
+        .hero-card h4 { color: white; font-size: 28px; margin-bottom: 8px; }
+        .hero-card p { color: rgba(255,255,255,0.5); font-size: 14px; margin-bottom: 24px; }
+        .mini-form { display: flex; flex-direction: column; gap: 16px; }
+        .mini-form input, .mini-form select { 
+            background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); 
+            padding: 14px; border-radius: 8px; color: white; font-family: inherit; font-size: 14px; outline: none;
+        }
+        .mini-form input:focus { border-color: var(--gold); }
+        .hero-card .trust-stars { margin-top: 24px; color: var(--gold); text-align: center; font-size: 12px; opacity: 0.8; }
+
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeInRight { from { opacity: 0; transform: translateY(-50%) translateX(40px); } to { opacity: 1; transform: translateY(-50%) translateX(0); } }
+
+        /* Trust Bar */
+        .trust-bar { background: var(--navy-mid); padding: 24px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .trust-flex { display: flex; justify-content: center; align-items: center; gap: 48px; flex-wrap: wrap; }
+        .trust-item { color: rgba(255,255,255,0.55); font-size: 13px; font-weight: 500; display: flex; align-items: center; gap: 10px; }
+
+        /* Services Grid */
+        .service-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px; margin-top: 64px; }
+        .service-card { 
+            background: white; padding: 40px 32px; border-radius: var(--radius-lg); border: 1px solid var(--ivory-2); 
+            transition: 0.4s; position: relative; overflow: hidden;
+        }
+        .service-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-lg); }
+        .service-icon { 
+            width: 56px; height: 56px; background: var(--ivory-2); border-radius: 14px; 
+            display: grid; place-items: center; font-size: 24px; margin-bottom: 24px; transition: 0.3s;
+        }
+        .service-card:hover .service-icon { background: var(--mint-light); }
+        .service-card h3 { font-size: 24px; color: var(--navy); margin-bottom: 12px; }
+        .service-card p { font-size: 14px; color: var(--text-muted); margin-bottom: 24px; }
+        .service-card a { color: var(--gold); font-weight: 600; font-size: 14px; }
+        .accent-bar { position: absolute; bottom: 0; left: 0; width: 100%; height: 3px; background: var(--gold); transform: scaleX(0); transition: 0.4s; transform-origin: left; }
+        .service-card:hover .accent-bar { transform: scaleX(1); }
+
+        /* Why Us */
+        .why-us { background: var(--navy); color: white; overflow: hidden; }
+        .why-grid { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 80px; align-items: center; }
+        .feature-list { display: flex; flex-direction: column; gap: 32px; margin: 40px 0; }
+        .feature-item { display: flex; gap: 20px; }
+        .feature-icon { 
+            flex-shrink: 0; width: 32px; height: 32px; border-radius: 50%; 
+            background: rgba(42, 190, 170, 0.15); border: 1px solid var(--mint); 
+            color: var(--mint); display: grid; place-items: center; font-size: 14px;
+        }
+        .feature-item h5 { font-size: 18px; margin-bottom: 4px; }
+        .feature-item p { font-size: 14px; color: rgba(255,255,255,0.6); }
+
+        .why-visual { position: relative; height: 580px; background: linear-gradient(135deg, var(--navy-mid) 0%, #050E18 100%); border-radius: var(--radius-lg); display: flex; align-items: center; justify-content: center; }
+        .giant-emoji { font-size: 180px; opacity: 0.12; animation: bounce 4s infinite ease-in-out; }
+        .glass-badge { 
+            position: absolute; bottom: 40px; left: 40px; right: 40px; 
+            background: rgba(255,255,255,0.06); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.1); 
+            padding: 24px; border-radius: var(--radius); 
+        }
+
+        /* Booking Section */
+        .booking-section { background: var(--ivory-2); }
+        .booking-grid { display: grid; grid-template-columns: 1fr 1.2fr; gap: 64px; }
+        .perk-item { display: flex; gap: 12px; margin-bottom: 16px; font-weight: 500; font-size: 15px; }
+        .perk-item span { color: var(--mint); }
+        .branch-phone { display: block; font-family: 'Cormorant Garamond', serif; font-size: 26px; color: var(--navy); margin-bottom: 8px; }
+        
+        .booking-form-card { background: white; padding: 48px; border-radius: var(--radius-lg); box-shadow: var(--shadow); }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 8px; color: var(--text-muted); }
+        .form-group label span { color: var(--red); }
+        .form-group input, .form-group select, .form-group textarea { 
+            width: 100%; padding: 14px; border: 1px solid #E2E8F0; border-radius: 8px; 
+            font-family: inherit; font-size: 15px; transition: 0.3s;
+        }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: var(--gold); }
+        .privacy-note { font-size: 12px; color: var(--text-muted); text-align: center; margin-top: 20px; }
+        .error-msg { color: var(--red); font-size: 11px; margin-top: 4px; display: none; }
+
+        /* Team Section */
+        .team-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 32px; margin-top: 64px; }
+        .team-card { background: white; padding: 40px; border-radius: 20px; border: 1px solid var(--ivory-2); text-align: center; transition: 0.4s; }
+        .team-card:hover { transform: translateY(-8px); box-shadow: var(--shadow-lg); }
+        .team-avatar { width: 80px; height: 80px; background: linear-gradient(135deg, var(--ivory-2), var(--mint-light)); border-radius: 50%; margin: 0 auto 24px; display: grid; place-items: center; font-size: 32px; }
+        .team-card h3 { font-size: 22px; color: var(--navy); margin-bottom: 4px; }
+        .specialty-tag { font-family: 'Space Mono', monospace; font-size: 10px; color: var(--gold); letter-spacing: 1px; display: block; margin-bottom: 16px; font-weight: 700; }
+        .team-card p { font-size: 14px; color: var(--text-muted); }
+
+        /* Testimonials */
+        .testi-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 64px; }
+        .testi-card { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); padding: 40px; border-radius: 20px; backdrop-filter: blur(10px); }
+        .stars { color: var(--gold); margin-bottom: 20px; font-size: 14px; }
+        .testi-card blockquote { font-family: 'Cormorant Garamond', serif; font-size: 20px; font-style: italic; color: rgba(255,255,255,0.85); margin-bottom: 32px; line-height: 1.4; }
+        .author-row { display: flex; align-items: center; gap: 16px; }
+        .author-circle { width: 44px; height: 44px; background: var(--gold); color: var(--navy); font-weight: 700; border-radius: 50%; display: grid; place-items: center; }
+        .author-info h5 { color: white; font-size: 15px; margin-bottom: 2px; }
+        .author-info span { font-size: 12px; color: rgba(255,255,255,0.4); }
+
+        /* Locations */
+        .loc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin-top: 64px; }
+        .loc-card { background: white; border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow); }
+        .loc-map-placeholder { height: 240px; background: linear-gradient(135deg, var(--navy), var(--navy-mid)); display: flex; align-items: center; justify-content: center; color: white; position: relative; }
+        .loc-map-placeholder span { font-family: 'Cormorant Garamond', serif; font-size: 32px; z-index: 1; }
+        .loc-body { padding: 40px; }
+        .loc-body h3 { font-size: 28px; margin-bottom: 16px; }
+        .loc-body p { margin-bottom: 24px; color: var(--text-muted); font-size: 15px; }
+        .loc-link { color: var(--gold); font-weight: 700; font-size: 14px; }
+
+        /* Footer */
+        footer { background: var(--navy); color: white; padding-top: 80px; }
+        .footer-grid { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 64px; padding-bottom: 64px; }
+        .footer-logo .logo-text { margin-bottom: 20px; display: block; }
+        .footer-logo p { color: rgba(255,255,255,0.5); font-size: 14px; margin-bottom: 24px; }
+        .socials { display: flex; gap: 16px; }
+        .socials a { font-size: 20px; color: white; transition: 0.3s; }
+        .socials a:hover { color: var(--gold); }
+        
+        .footer-col h5 { font-size: 18px; margin-bottom: 24px; color: var(--gold-light); }
+        .footer-col ul li { margin-bottom: 12px; }
+        .footer-col ul a { color: rgba(255,255,255,0.6); font-size: 14px; }
+        .footer-col ul a:hover { color: white; padding-left: 4px; }
+
+        .footer-bottom { border-top: 1px solid rgba(255,255,255,0.1); padding: 32px 0; display: flex; justify-content: space-between; font-size: 13px; color: rgba(255,255,255,0.4); }
+
+        /* Modal */
+        .modal-overlay { position: fixed; inset: 0; background: rgba(11, 29, 48, 0.85); backdrop-filter: blur(8px); z-index: 2000; display: none; place-items: center; padding: 20px; }
+        .modal-card { background: white; padding: 52px; border-radius: var(--radius-lg); max-width: 480px; width: 100%; text-align: center; transform: scale(0.9); transition: 0.3s; }
+        .modal-overlay.active { display: grid; }
+        .modal-overlay.active .modal-card { transform: scale(1); }
+        .modal-card .check-icon { font-size: 64px; margin-bottom: 24px; display: block; }
+        .modal-card h3 { font-size: 32px; margin-bottom: 12px; color: var(--navy); }
+        .modal-card p { margin-bottom: 32px; color: var(--text-muted); }
+
+        /* Toast */
+        .toast { position: fixed; bottom: 32px; right: 32px; background: var(--navy); color: white; padding: 16px 24px; border-radius: var(--radius); z-index: 2100; box-shadow: var(--shadow-lg); display: flex; align-items: center; gap: 12px; transform: translateX(120%); transition: 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55); border-left: 4px solid var(--mint); }
+        .toast.active { transform: translateX(0); }
+        .toast.error { border-left-color: var(--red); }
+
+        /* Mobile Adjustments */
+        @media (max-width: 1024px) {
+            .hero-card { display: none; }
+            .hero-content { width: 100%; }
+            .why-grid, .booking-grid { grid-template-columns: 1fr; }
+            .why-visual { display: none; }
+            .footer-grid { grid-template-columns: 1fr 1fr; gap: 40px; }
+        }
+        @media (max-width: 768px) {
+            nav { padding: 0 20px; }
+            .nav-links, .nav-actions .btn-outline { display: none; }
+            .hamburger { display: flex; }
+            .container { padding: 0 20px; }
+            section { padding: 72px 0; }
+            .hero-stats { grid-template-columns: repeat(2, 1fr); }
+            .testi-grid, .loc-grid, .team-grid { grid-template-columns: 1fr; }
+            .footer-grid { grid-template-columns: 1fr; }
+            .footer-bottom { flex-direction: column; gap: 12px; text-align: center; }
+            .form-row { grid-template-columns: 1fr; }
+        }
+
+        /* Scroll Animation Utility */
+        .reveal { opacity: 0; transform: translateY(24px); transition: 0.8s ease-out; }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+    </style>
+</head>
+<body>
+
+    <a href="#book" class="floating-book">📅 Book Appointment</a>
+
+    <nav id="navbar">
+        <div class="logo">
+            <div class="logo-icon">🦷</div>
+            <div class="logo-text">YOUR <span>DENTAL</span></div>
+        </div>
+        <div class="nav-links">
+            <a href="#services">Services</a>
+            <a href="#team">Our Team</a>
+            <a href="#locations">Locations</a>
+            <a href="#testimonials">Reviews</a>
+            <a href="#book">Contact</a>
+        </div>
+        <div class="nav-actions">
+            <a href="tel:09626292510" class="btn btn-outline btn-small">📞 Call Us</a>
+            <a href="#book" class="btn btn-primary btn-small">Book Now</a>
+            <div class="hamburger" onclick="toggleMenu()">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+    </nav>
+
+    <div class="mobile-drawer" id="mobileDrawer">
+        <a href="#services" onclick="toggleMenu()">Services</a>
+        <a href="#team" onclick="toggleMenu()">Our Team</a>
+        <a href="#locations" onclick="toggleMenu()">Locations</a>
+        <a href="#testimonials" onclick="toggleMenu()">Reviews</a>
+        <a href="#book" onclick="toggleMenu()">Book Appointment</a>
+        <a href="tel:09626292510" class="btn btn-primary">Call Now</a>
+    </div>
+
+    <header class="hero">
+        <div class="hero-bg-layer glow-mint"></div>
+        <div class="hero-bg-layer glow-gold"></div>
+        <div class="hero-bg-layer grid-overlay"></div>
+        <img src="https://www.svgrepo.com/show/407572/tooth.svg" class="floating-tooth" alt="">
+        
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-badge">
+                    <div class="pulse"></div>
+                    Metro Manila's Top-Rated Dental Clinic
+                </div>
+                <h1>Your Smile Deserves <br>the <i>Best</i></h1>
+                <p>Experience world-class dentistry in the heart of Metro Manila. From routine hygiene to advanced oral surgery, your comfort is our priority.</p>
+                <div style="display: flex; gap: 16px; flex-wrap: wrap;">
+                    <a href="#book" class="btn btn-primary" style="padding: 18px 36px; font-size: 18px;">📅 Book Your Appointment</a>
+                    <a href="#services" class="btn btn-outline" style="padding: 18px 36px; font-size: 18px;">Explore Services</a>
+                </div>
+                
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <h3>2026+</h3>
+                        <p>Years in Practice</p>
+                    </div>
+                    <div class="stat-item">
+                        <h3>5,000+</h3>
+                        <p>Patients</p>
+                    </div>
+                    <div class="stat-item">
+                        <h3>4.9★</h3>
+                        <p>Google Rating</p>
+                    </div>
+                    <div class="stat-item">
+                        <h3>2</h3>
+                        <p>Locations</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="hero-card">
+            <h4>Quick Book</h4>
+            <p>Ready to transform your smile? Reserve your slot in 30 seconds.</p>
+            <form class="mini-form" onsubmit="event.preventDefault(); window.location.hash = 'book';">
+                <select required>
+                    <option value="" disabled selected>Select Service</option>
+                    <option>General Dentistry</option>
+                    <option>Cosmetic Dentistry</option>
+                    <option>Dental Implants</option>
+                    <option>Sedation Dentistry</option>
+                </select>
+                <select required>
+                    <option value="" disabled selected>Choose Branch</option>
+                    <option>Makati Central</option>
+                    <option>Quezon City North</option>
+                </select>
+                <input type="text" placeholder="Preferred date (e.g. June 15)" required>
+                <button class="btn btn-primary" style="width: 100%;">Reserve Slot →</button>
+            </form>
+            <div class="trust-stars">
+                ★★★★★ <br>
+                Trusted by 5,000+ patients in Metro Manila
+            </div>
+        </div>
+    </header>
+
+    <div class="trust-bar">
+        <div class="container">
+            <div class="trust-flex">
+                <div class="trust-item">🏆 Top-Rated in Metro Manila</div>
+                <div class="trust-item">🦷 Advanced Laser Technology</div>
+                <div class="trust-item">💉 Painless Sedation Available</div>
+                <div class="trust-item">👶 Family & Pediatric Care</div>
+                <div class="trust-item">📅 Mon–Sat by Appointment</div>
+            </div>
+        </div>
+    </div>
+
+    <section id="services">
+        <div class="container">
+            <div class="reveal">
+                <div class="tag">Comprehensive Care</div>
+                <h2>Expert Dental Solutions</h2>
+                <p style="color: var(--text-muted); max-width: 600px;">Tailored treatments designed for lasting health and aesthetics, delivered with precision and care.</p>
+            </div>
+
+            <div class="service-grid">
+                <!-- Service 1 -->
+                <div class="service-card reveal">
+                    <div class="service-icon">🦷</div>
+                    <h3>General Dentistry</h3>
+                    <p>Routine cleanings, exams, fillings, and preventive care to keep your smile healthy and bright.</p>
+                    <a href="#book">Book Consultation →</a>
+                    <div class="accent-bar"></div>
+                </div>
+                <!-- Service 2 -->
+                <div class="service-card reveal">
+                    <div class="service-icon">✨</div>
+                    <h3>Cosmetic Dentistry</h3>
+                    <p>Transform your look with veneers, professional whitening, and full smile makeovers.</p>
+                    <a href="#book">Book Consultation →</a>
+                    <div class="accent-bar"></div>
+                </div>
+                <!-- Service 3 -->
+                <div class="service-card reveal">
+                    <div class="service-icon">🔩</div>
+                    <h3>Dental Implants</h3>
+                    <p>Permanent, natural-looking replacements for missing teeth using the latest titanium technology.</p>
+                    <a href="#book">Book Consultation →</a>
+                    <div class="accent-bar"></div>
+                </div>
+                <!-- Service 4 -->
+                <div class="service-card reveal">
+                    <div class="service-icon">😴</div>
+                    <h3>Sedation Dentistry</h3>
+                    <p>Anxiety-free care with safe, comfortable sedation options for a completely relaxed experience.</p>
+                    <a href="#book">Book Consultation →</a>
+                    <div class="accent-bar"></div>
+                </div>
+                <!-- Service 5 -->
+                <div class="service-card reveal">
+                    <div class="service-icon">👶</div>
+                    <h3>Pedodontics</h3>
+                    <p>Gentle, fun, and kid-friendly dental care from specialists who love working with children.</p>
+                    <a href="#book">Book Consultation →</a>
+                    <div class="accent-bar"></div>
+                </div>
+                <!-- Service 6 -->
+                <div class="service-card reveal">
+                    <div class="service-icon">🔬</div>
+                    <h3>Laser Dentistry</h3>
+                    <p>Precise, faster-healing laser treatments for gums and soft tissues with minimal discomfort.</p>
+                    <a href="#book">Book Consultation →</a>
+                    <div class="accent-bar"></div>
+                </div>
+                <!-- Service 7 -->
+                <div class="service-card reveal">
+                    <div class="service-icon">🦴</div>
+                    <h3>Periodontics</h3>
+                    <p>Expert gum disease care and long-term periodontal management to save your foundation.</p>
+                    <a href="#book">Book Consultation →</a>
+                    <div class="accent-bar"></div>
+                </div>
+                <!-- Service 8 -->
+                <div class="service-card reveal">
+                    <div class="service-icon">😬</div>
+                    <h3>TMJD Treatment</h3>
+                    <p>Specialized diagnosis and relief for jaw pain, clicking, and tension-related headaches.</p>
+                    <a href="#book">Book Consultation →</a>
+                    <div class="accent-bar"></div>
+                </div>
+                <!-- Service 9 -->
+                <div class="service-card reveal">
+                    <div class="service-icon">🩹</div>
+                    <h3>Endodontics</h3>
+                    <p>Painless root canal therapy designed to save your natural teeth and eliminate infection.</p>
+                    <a href="#book">Book Consultation →</a>
+                    <div class="accent-bar"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="why-us">
+        <div class="container">
+            <div class="why-grid">
+                <div class="reveal">
+                    <div class="tag" style="color: var(--mint);">The Clinic Advantage</div>
+                    <h2 style="color: white;">Why Choose <i>Your Dental Business?</i></h2>
+                    <p style="color: rgba(255,255,255,0.6);">We combine artistic precision with medical excellence to provide an unmatched patient experience in Metro Manila.</p>
+                    
+                    <div class="feature-list">
+                        <div class="feature-item">
+                            <div class="feature-icon">✓</div>
+                            <div>
+                                <h5>State-of-the-Art Equipment</h5>
+                                <p>Digital X-rays, 3D impressions, and advanced laser tech for accuracy.</p>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">✓</div>
+                            <div>
+                                <h5>Experienced Specialist Team</h5>
+                                <p>Multiple dental disciplines under one roof, coordinated by experts.</p>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">✓</div>
+                            <div>
+                                <h5>Patient-First Philosophy</h5>
+                                <p>Constant comfort checks throughout every procedure—you are in control.</p>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">✓</div>
+                            <div>
+                                <h5>Transparent Pricing</h5>
+                                <p>Clear treatment plans with itemized costs and no hidden surprise fees.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <a href="#book" class="btn btn-primary">Schedule a Free Consultation</a>
+                </div>
+
+                <div class="why-visual reveal">
+                    <div class="giant-emoji">🦷</div>
+                    <div class="glass-badge">
+                        <div style="color: var(--gold); margin-bottom: 8px;">★★★★★</div>
+                        <h4 style="color: white; font-size: 18px;">Top-Rated on Google</h4>
+                        <p style="color: rgba(255,255,255,0.5); font-size: 13px;">4.9/5 — 500+ verified patient reviews from across the metro.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="book" class="booking-section">
+        <div class="container">
+            <div class="booking-grid">
+                <div class="reveal">
+                    <div class="tag">Book Your Visit</div>
+                    <h2>Start Your Journey to a <br>Perfect Smile Today</h2>
+                    <p style="color: var(--text-muted); margin: 24px 0 40px;">Our team is ready to provide you with the personalized care you deserve. Secure your appointment at either our Makati or Quezon City branches.</p>
+                    
+                    <div style="margin-bottom: 40px;">
+                        <div class="perk-item"><span>✅</span> Confirmation within 2 hours</div>
+                        <div class="perk-item"><span>✅</span> Free consultation for new patients</div>
+                        <div class="perk-item"><span>✅</span> Flexible scheduling Mon–Sat</div>
+                        <div class="perk-item"><span>✅</span> Both branches available</div>
+                        <div class="perk-item"><span>✅</span> Sedation options upon request</div>
+                    </div>
+
+                    <label style="font-size: 13px; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Prefer to call?</label>
+                    <a href="tel:09626292510" class="branch-phone">0962 629 2510</a>
+                    <a href="tel:09626292510" class="branch-phone" style="font-size: 18px; opacity: 0.7;">(02) 8888-DENT</a>
+                </div>
+
+                <div class="booking-form-card reveal">
+                    <form id="bookingForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>First Name <span>*</span></label>
+                                <input type="text" id="fname" placeholder="Juan" required>
+                                <span class="error-msg">This field is required</span>
+                            </div>
+                            <div class="form-group">
+                                <label>Last Name <span>*</span></label>
+                                <input type="text" id="lname" placeholder="Dela Cruz" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Email Address <span>*</span></label>
+                            <input type="email" id="email" placeholder="juan@email.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Mobile Number (09XXXXXXXXX) <span>*</span></label>
+                            <input type="tel" id="phone" pattern="09[0-9]{9}" placeholder="09123456789" required>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Branch <span>*</span></label>
+                                <select id="branch" required>
+                                    <option value="">Select Branch</option>
+                                    <option>Makati Central</option>
+                                    <option>Quezon City North</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Service <span>*</span></label>
+                                <select id="service" required>
+                                    <option value="">Select Service</option>
+                                    <option>General Checkup</option>
+                                    <option>Cosmetic / Veneers</option>
+                                    <option>Dental Implants</option>
+                                    <option>Orthodontics</option>
+                                    <option>Other</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Preferred Date <span>*</span></label>
+                            <input type="date" id="date" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Additional Notes</label>
+                            <textarea id="notes" rows="3" maxlength="500" placeholder="Tell us about your dental concerns..."></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-dark" style="width: 100%;" id="submitBtn">📅 Confirm My Appointment</button>
+                        <p class="privacy-note">🔒 Your information is encrypted and only used by clinic staff.</p>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="team">
+        <div class="container">
+            <div class="reveal" style="text-align: center;">
+                <div class="tag" style="justify-content: center;">Our Specialists</div>
+                <h2>Meet the Experts Behind Your Smile</h2>
+                <p style="color: var(--text-muted); max-width: 600px; margin: 0 auto;">Our team of highly-trained specialists is dedicated to providing pain-free, world-class dental care.</p>
+            </div>
+
+            <div class="team-grid">
+                <!-- Member 1 -->
+                <div class="team-card reveal">
+                    <div class="team-avatar">👨‍⚕️</div>
+                    <h3>Dr. Ivan Mark Escudero</h3>
+                    <span class="specialty-tag">LEAD DENTIST & IMPLANTOLOGIST</span>
+                    <p>UP Manila graduate, US-trained specialist in restorative implants. Founder of Your Dental Business.</p>
+                </div>
+                <!-- Member 2 -->
+                <div class="team-card reveal">
+                    <div class="team-avatar">👩‍⚕️</div>
+                    <h3>Dr. Maria Santos</h3>
+                    <span class="specialty-tag">GENERAL & COSMETIC DENTIST</span>
+                    <p>Expert in full-mouth reconstructions and natural-looking porcelain veneers with 12 years of experience.</p>
+                </div>
+                <!-- Member 3 -->
+                <div class="team-card reveal">
+                    <div class="team-avatar">👩‍⚕️</div>
+                    <h3>Dr. Anna Reyes</h3>
+                    <span class="specialty-tag">GENERAL DENTIST</span>
+                    <p>Specializes in preventive care and aesthetic bondings. Advocate for conservative dentistry.</p>
+                </div>
+                <!-- Member 4 -->
+                <div class="team-card reveal">
+                    <div class="team-avatar">👶</div>
+                    <h3>Dr. Lean Cruz</h3>
+                    <span class="specialty-tag">PEDIATRIC DENTIST</span>
+                    <p>The "Kid Expert" who turns dental nerves into giggles. Expert in gentle, fun pediatric care.</p>
+                </div>
+                <!-- Member 5 -->
+                <div class="team-card reveal">
+                    <div class="team-avatar">🦷</div>
+                    <h3>Dr. Robert Lim</h3>
+                    <span class="specialty-tag">ENDODONTIST</span>
+                    <p>Root canal specialist focusing on painless therapy and saving natural teeth from extraction.</p>
+                </div>
+                <!-- Member 6 -->
+                <div class="team-card reveal">
+                    <div class="team-avatar">😬</div>
+                    <h3>Dr. Elena Garcia</h3>
+                    <span class="specialty-tag">TMJ & JAW PAIN EXPERT</span>
+                    <p>Focuses on therapeutic injections and oral appliances to relieve chronic jaw pain and clicking.</p>
+                </div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 48px;" class="reveal">
+                <a href="#book" class="btn btn-dark">Book with a Specialist →</a>
+            </div>
+        </div>
+    </section>
+
+    <section id="testimonials" style="background: var(--navy); color: white;">
+        <div class="container">
+            <div class="reveal" style="text-align: center;">
+                <div class="tag" style="justify-content: center; color: var(--gold-light);">Patient Stories</div>
+                <h2 style="color: white;">Loved by Patients Across Metro Manila</h2>
+                <p style="color: rgba(255,255,255,0.5); max-width: 600px; margin: 0 auto;">See why thousands of Filipinos trust us with their oral health.</p>
+            </div>
+
+            <div class="testi-grid">
+                <div class="testi-card reveal">
+                    <div class="stars">★★★★★</div>
+                    <blockquote>"Finding a dentist who can handle a scared child is hard. Dr. Lean at the QC branch was amazing! My daughter didn't even cry during her extraction."</blockquote>
+                    <div class="author-row">
+                        <div class="author-circle">M</div>
+                        <div class="author-info">
+                            <h5>Michelle Sy</h5>
+                            <span>QC North Branch</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="testi-card reveal">
+                    <div class="stars">★★★★★</div>
+                    <blockquote>"I had 4 implants done with Dr. Ivan. The sedation dentistry made the whole thing a breeze. I finally have my confidence back. Highly recommended!"</blockquote>
+                    <div class="author-row">
+                        <div class="author-circle">R</div>
+                        <div class="author-info">
+                            <h5>Ricardo Gomez</h5>
+                            <span>Makati Central Branch</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="testi-card reveal">
+                    <div class="stars">★★★★★</div>
+                    <blockquote>"Fast, clean, and very professional. The aesthetic team in Makati did my veneers and they look so natural. No more hiding my smile!"</blockquote>
+                    <div class="author-row">
+                        <div class="author-circle">J</div>
+                        <div class="author-info">
+                            <h5>Jessica Tan</h5>
+                            <span>Makati Central Branch</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="locations">
+        <div class="container">
+            <div class="reveal">
+                <div class="tag">Find Us</div>
+                <h2>Our Metro Manila Branches</h2>
+                <p style="color: var(--text-muted); max-width: 600px;">Conveniently located to serve you better. Visit the branch nearest to you.</p>
+            </div>
+
+            <div class="loc-grid">
+                <div class="loc-card reveal">
+                    <div class="loc-map-placeholder">
+                        <span>📍 Makati Central</span>
+                    </div>
+                    <div class="loc-body">
+                        <h3>Makati Central</h3>
+                        <p>Unit 204, Global Tower, Ayala Ave, Makati City, 1226 Metro Manila</p>
+                        <p><strong>Phone:</strong> <a href="tel:09626292510">0962 629 2510</a></p>
+                        <p><strong>Hours:</strong> Mon – Sat: 9:00 AM – 6:00 PM</p>
+                        <a href="#" class="loc-link">Get Directions →</a>
+                    </div>
+                </div>
+                <div class="loc-card reveal">
+                    <div class="loc-map-placeholder" style="background: linear-gradient(135deg, var(--navy-mid), var(--gold));">
+                        <span>📍 Quezon City North</span>
+                    </div>
+                    <div class="loc-body">
+                        <h3>Quezon City North</h3>
+                        <p>12F Sky Plaza, North Ave cor. EDSA, Quezon City, 1100 Metro Manila</p>
+                        <p><strong>Phone:</strong> <a href="tel:09626292510">0962 629 2510</a></p>
+                        <p><strong>Hours:</strong> Mon – Sat: 10:00 AM – 7:00 PM</p>
+                        <a href="#" class="loc-link">Get Directions →</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-logo">
+                    <div class="logo">
+                        <div class="logo-icon">🦷</div>
+                        <div class="logo-text">YOUR <span>DENTAL</span></div>
+                    </div>
+                    <p>Experience world-class dentistry in the heart of Metro Manila. Your comfort and confidence are our only priorities.</p>
+                    <div class="socials">
+                        <a href="https://www.facebook.com/ivanmark.escudero.75">FB</a>
+                        <a href="https://www.instagram.com/nihexist/">IG</a>
+                        <a href="#">TT</a>
+                        <a href="#">YT</a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h5>Quick Links</h5>
+                    <ul>
+                        <li><a href="#services">Services</a></li>
+                        <li><a href="#team">Our Team</a></li>
+                        <li><a href="#locations">Locations</a></li>
+                        <li><a href="#testimonials">Reviews</a></li>
+                        <li><a href="#book">Book Appointment</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h5>Services</h5>
+                    <ul>
+                        <li><a href="#services">General Dentistry</a></li>
+                        <li><a href="#services">Cosmetic Care</a></li>
+                        <li><a href="#services">Dental Implants</a></li>
+                        <li><a href="#services">Root Canals</a></li>
+                        <li><a href="#services">Pedodontics</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h5>Contact</h5>
+                    <ul>
+                        <li><a href="tel:09626292510">📞 0962 629 2510</a></li>
+                        <li><a href="mailto:hello@yourdental.ph">✉️ hello@yourdental.ph</a></li>
+                        <li><a href="#">📍 Ayala Ave, Makati City</a></li>
+                        <li><a href="#">📍 North Ave, Quezon City</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Your Dental Business. All Rights Reserved.</p>
+                <p>Made with ❤️ for Metro Manila smiles</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modals & Toasts -->
+    <div class="modal-overlay" id="successModal" onclick="closeModal()">
+        <div class="modal-card" onclick="event.stopPropagation()">
+            <span class="check-icon">✅</span>
+            <h3>Appointment Requested!</h3>
+            <p>Thank you for choosing us. One of our patient coordinators will call you within the next 2 hours to confirm your slot.</p>
+            <button class="btn btn-dark" onclick="closeModal()">Close</button>
+        </div>
+    </div>
+
+    <div class="toast" id="toast">
+        <span id="toastIcon">ℹ️</span>
+        <span id="toastMsg">Message goes here</span>
+    </div>
+
+    <script>
+        // Navbar scroll effect
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
+            }
+        });
+
+        // Mobile Menu
+        function toggleMenu() {
+            const drawer = document.getElementById('mobileDrawer');
+            drawer.classList.toggle('active');
+        }
+
+        // Form Validation & Submission
+        const bookingForm = document.getElementById('bookingForm');
+        let attempts = 0;
+
+        // Set min date for picker
+        const dateInput = document.getElementById('date');
+        const tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        dateInput.min = tomorrow.toISOString().split('T')[0];
+
+        bookingForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            if (attempts >= 5) {
+                showToast("Too many attempts. Please try again later.", "error");
+                return;
+            }
+
+            const phone = document.getElementById('phone').value;
+            const phoneRegex = /^09\d{9}$/;
+
+            if (!phoneRegex.test(phone)) {
+                showToast("Please enter a valid PH mobile number (09XXXXXXXXX)", "error");
+                return;
+            }
+
+            const btn = document.getElementById('submitBtn');
+            btn.innerText = "Processing...";
+            btn.disabled = true;
+
+            // Simulate network delay
+            setTimeout(() => {
+                attempts++;
+                document.getElementById('successModal').classList.add('active');
+                bookingForm.reset();
+                btn.innerText = "📅 Confirm My Appointment";
+                btn.disabled = false;
+            }, 1200);
+        });
+
+        function closeModal() {
+            document.getElementById('successModal').classList.remove('active');
+        }
+
+        function showToast(msg, type = "success") {
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toastMsg');
+            const toastIcon = document.getElementById('toastIcon');
+            
+            toastMsg.innerText = msg;
+            toastIcon.innerText = type === "error" ? "❌" : "✅";
+            
+            if(type === "error") toast.classList.add('error');
+            else toast.classList.remove('error');
+
+            toast.classList.add('active');
+            setTimeout(() => {
+                toast.classList.remove('active');
+            }, 4000);
+        }
+
+        // Intersection Observer for fade-in
+        const observerOptions = { threshold: 0.1 };
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    </script>
+
+    <!-- Schema.org JSON-LD -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Dentist",
+      "name": "Your Dental Business",
+      "image": "https://yourdentalbusiness.com/logo.png",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Ayala Ave",
+        "addressLocality": "Makati",
+        "addressRegion": "Metro Manila",
+        "postalCode": "1226",
+        "addressCountry": "PH"
+      },
+      "telephone": "+639626292510",
+      "url": "https://yourdentalbusiness.com",
+      "openingHours": "Mo-Sa 09:00-18:00",
+      "priceRange": "$$",
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.9",
+        "reviewCount": "5000"
+      }
+    }
+    </script>
+</body>
+</html>
