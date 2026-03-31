@@ -10,7 +10,7 @@
     <meta property="og:title" content="Your Dental Business | Metro Manila's Top Clinic">
     <meta property="og:description" content="World-class dentistry in the heart of Metro Manila. 5,000+ happy patients and 4.9★ rating.">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://yourdentalbusiness.com">
+    <meta property="og:url" content="https://facebook.com/ivanmark.escudero.75">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -114,15 +114,15 @@
         }
         @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
 
-        /* Hero */
+        /* Hero Section Fixes */
         .hero { 
-    height: 100vh; 
-    background: var(--navy); 
-    display: flex; 
-    align-items: center; 
-    overflow: hidden; 
-    padding-top: 120px; /* Increased from 72px to prevent overlap */
-}
+            height: 100vh; 
+            background: var(--navy); 
+            display: flex; 
+            align-items: center; 
+            overflow: hidden; 
+            padding-top: 140px; /* Pushes content down to clear the fixed Nav */
+        }
         .hero-bg-layer { position: absolute; inset: 0; pointer-events: none; }
         .glow-mint { background: radial-gradient(circle at 70% 50%, rgba(42, 190, 170, 0.15) 0%, transparent 50%); }
         .glow-gold { background: radial-gradient(circle at 10% 80%, rgba(191, 155, 90, 0.1) 0%, transparent 50%); }
@@ -130,20 +130,11 @@
         .floating-tooth { position: absolute; right: -100px; top: 10%; width: 680px; opacity: 0.06; animation: rotate 8s infinite alternate ease-in-out; }
         @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(4deg); } }
 
-        .hero-content { position: relative; z-index: 2; width: 60%; transform: translateY(30px); opacity: 0; animation: fadeInUp 0.8s forwards 0.2s; }
-.hero-content h1 { 
-    font-size: clamp(40px, 5vw, 72px); 
-    color: white; 
-    line-height: 0.95;               
-    margin: 16px 0 24px 0;           
-}
+        .hero-content { position: relative; z-index: 2; width: 60%; transform: translateY(40px); opacity: 0; animation: fadeInUp 0.8s forwards 0.2s; }
+        .hero-content h1 { font-size: clamp(48px, 6vw, 88px); color: white; line-height: 1.1; margin-bottom: 24px; }
         .hero-content h1 i { color: var(--gold); font-style: italic; }
         .hero-content p { font-size: 18px; color: rgba(255,255,255,0.65); max-width: 520px; margin-bottom: 40px; }
         
-        .hero-badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(191, 155, 90, 0.15); color: var(--gold-light); padding: 8px 16px; border-radius: 50px; font-size: 13px; margin-top: 40px; margin-bottom: 24px; font-weight: 600; border: 1px solid rgba(191,155,90,0.3); }
-        .pulse { width: 8px; height: 8px; background: var(--gold); border-radius: 50%; box-shadow: 0 0 0 rgba(191, 155, 90, 0.4); animation: pulse 2s infinite; }
-        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(191, 155, 90, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(191, 155, 90, 0); } 100% { box-shadow: 0 0 0 0 rgba(191, 155, 90, 0); } }
-
         .hero-stats { margin-top: 64px; padding-top: 32px; border-top: 1px solid rgba(255,255,255,0.1); display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; opacity: 0; animation: fadeInUp 0.8s forwards 0.6s; }
         .stat-item h3 { font-size: 44px; color: var(--gold-light); line-height: 1; margin-bottom: 4px; }
         .stat-item p { font-size: 13px; text-transform: uppercase; letter-spacing: 1px; color: rgba(255,255,255,0.4); margin-bottom: 0; }
@@ -154,13 +145,7 @@
             background: rgba(255,255,255,0.06); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.12);
             padding: 40px; border-radius: var(--radius-lg); width: 380px; z-index: 3; opacity: 0; animation: fadeInRight 0.8s forwards 0.5s;
         }
-       .hero-card { 
-    position: absolute; 
-    right: 32px; 
-    top: 60%; /* Changed from 55% to move the card down with the text */
-    transform: translateY(-50%) translateX(0);
-    /* ... rest of your code ... */
-}
+        .hero-card h4 { color: white; font-size: 28px; margin-bottom: 8px; }
         .hero-card p { color: rgba(255,255,255,0.5); font-size: 14px; margin-bottom: 24px; }
         .mini-form { display: flex; flex-direction: column; gap: 16px; }
         .mini-form input, .mini-form select { 
@@ -170,7 +155,7 @@
         .mini-form input:focus { border-color: var(--gold); }
         .hero-card .trust-stars { margin-top: 24px; color: var(--gold); text-align: center; font-size: 12px; opacity: 0.8; }
 
-        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes fadeInRight { from { opacity: 0; transform: translateY(-50%) translateX(40px); } to { opacity: 1; transform: translateY(-50%) translateX(0); } }
 
         /* Trust Bar */
@@ -362,12 +347,9 @@
         <div class="hero-bg-layer grid-overlay"></div>
         <img src="https://www.svgrepo.com/show/407572/tooth.svg" class="floating-tooth" alt="">
         
-<div class="container">
+        <div class="container">
             <div class="hero-content">
-                <div class="hero-badge">
-                    <div class="pulse"></div>
-                     Metro Manila's Top-Rated Dental Clinic
-                </div>
+                <!-- BADGE REMOVED HERE TO ELIMINATE OVERLAP -->
                 <h1>Your Smile Deserves <br>the <i>Best</i></h1>
                 <p>Experience world-class dentistry in the heart of Metro Manila. From routine hygiene to advanced oral surgery, your comfort is our priority.</p>
                 <div style="display: flex; gap: 16px; flex-wrap: wrap;">
@@ -434,6 +416,7 @@
         </div>
     </div>
 
+    <!-- SERVICES -->
     <section id="services">
         <div class="container">
             <div class="reveal">
@@ -443,7 +426,6 @@
             </div>
 
             <div class="service-grid">
-                <!-- Service 1 -->
                 <div class="service-card reveal">
                     <div class="service-icon">🦷</div>
                     <h3>General Dentistry</h3>
@@ -451,7 +433,6 @@
                     <a href="#book">Book Consultation →</a>
                     <div class="accent-bar"></div>
                 </div>
-                <!-- Service 2 -->
                 <div class="service-card reveal">
                     <div class="service-icon">✨</div>
                     <h3>Cosmetic Dentistry</h3>
@@ -459,7 +440,6 @@
                     <a href="#book">Book Consultation →</a>
                     <div class="accent-bar"></div>
                 </div>
-                <!-- Service 3 -->
                 <div class="service-card reveal">
                     <div class="service-icon">🔩</div>
                     <h3>Dental Implants</h3>
@@ -467,7 +447,6 @@
                     <a href="#book">Book Consultation →</a>
                     <div class="accent-bar"></div>
                 </div>
-                <!-- Service 4 -->
                 <div class="service-card reveal">
                     <div class="service-icon">😴</div>
                     <h3>Sedation Dentistry</h3>
@@ -475,7 +454,6 @@
                     <a href="#book">Book Consultation →</a>
                     <div class="accent-bar"></div>
                 </div>
-                <!-- Service 5 -->
                 <div class="service-card reveal">
                     <div class="service-icon">👶</div>
                     <h3>Pedodontics</h3>
@@ -483,7 +461,6 @@
                     <a href="#book">Book Consultation →</a>
                     <div class="accent-bar"></div>
                 </div>
-                <!-- Service 6 -->
                 <div class="service-card reveal">
                     <div class="service-icon">🔬</div>
                     <h3>Laser Dentistry</h3>
@@ -491,7 +468,6 @@
                     <a href="#book">Book Consultation →</a>
                     <div class="accent-bar"></div>
                 </div>
-                <!-- Service 7 -->
                 <div class="service-card reveal">
                     <div class="service-icon">🦴</div>
                     <h3>Periodontics</h3>
@@ -499,7 +475,6 @@
                     <a href="#book">Book Consultation →</a>
                     <div class="accent-bar"></div>
                 </div>
-                <!-- Service 8 -->
                 <div class="service-card reveal">
                     <div class="service-icon">😬</div>
                     <h3>TMJD Treatment</h3>
@@ -507,7 +482,6 @@
                     <a href="#book">Book Consultation →</a>
                     <div class="accent-bar"></div>
                 </div>
-                <!-- Service 9 -->
                 <div class="service-card reveal">
                     <div class="service-icon">🩹</div>
                     <h3>Endodontics</h3>
@@ -519,6 +493,7 @@
         </div>
     </section>
 
+    <!-- WHY US -->
     <section class="why-us">
         <div class="container">
             <div class="why-grid">
@@ -557,7 +532,6 @@
                             </div>
                         </div>
                     </div>
-                    
                     <a href="#book" class="btn btn-primary">Schedule a Free Consultation</a>
                 </div>
 
@@ -573,6 +547,7 @@
         </div>
     </section>
 
+    <!-- BOOKING -->
     <section id="book" class="booking-section">
         <div class="container">
             <div class="booking-grid">
@@ -591,7 +566,6 @@
 
                     <label style="font-size: 13px; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">Prefer to call?</label>
                     <a href="tel:09626292510" class="branch-phone">0962 629 2510</a>
-                    <a href="tel:09626292510" class="branch-phone" style="font-size: 18px; opacity: 0.7;">(02) 8888-DENT</a>
                 </div>
 
                 <div class="booking-form-card reveal">
@@ -600,7 +574,6 @@
                             <div class="form-group">
                                 <label>First Name <span>*</span></label>
                                 <input type="text" id="fname" placeholder="Juan" required>
-                                <span class="error-msg">This field is required</span>
                             </div>
                             <div class="form-group">
                                 <label>Last Name <span>*</span></label>
@@ -652,6 +625,7 @@
         </div>
     </section>
 
+    <!-- TEAM -->
     <section id="team">
         <div class="container">
             <div class="reveal" style="text-align: center;">
@@ -661,42 +635,36 @@
             </div>
 
             <div class="team-grid">
-                <!-- Member 1 -->
                 <div class="team-card reveal">
                     <div class="team-avatar">👨‍⚕️</div>
                     <h3>Dr. Ivan Mark Escudero</h3>
                     <span class="specialty-tag">LEAD DENTIST & IMPLANTOLOGIST</span>
                     <p>UP Manila graduate, US-trained specialist in restorative implants. Founder of Your Dental Business.</p>
                 </div>
-                <!-- Member 2 -->
                 <div class="team-card reveal">
                     <div class="team-avatar">👩‍⚕️</div>
                     <h3>Dr. Maria Santos</h3>
                     <span class="specialty-tag">GENERAL & COSMETIC DENTIST</span>
                     <p>Expert in full-mouth reconstructions and natural-looking porcelain veneers with 12 years of experience.</p>
                 </div>
-                <!-- Member 3 -->
                 <div class="team-card reveal">
                     <div class="team-avatar">👩‍⚕️</div>
                     <h3>Dr. Anna Reyes</h3>
                     <span class="specialty-tag">GENERAL DENTIST</span>
                     <p>Specializes in preventive care and aesthetic bondings. Advocate for conservative dentistry.</p>
                 </div>
-                <!-- Member 4 -->
                 <div class="team-card reveal">
                     <div class="team-avatar">👶</div>
                     <h3>Dr. Lean Cruz</h3>
                     <span class="specialty-tag">PEDIATRIC DENTIST</span>
                     <p>The "Kid Expert" who turns dental nerves into giggles. Expert in gentle, fun pediatric care.</p>
                 </div>
-                <!-- Member 5 -->
                 <div class="team-card reveal">
                     <div class="team-avatar">🦷</div>
                     <h3>Dr. Robert Lim</h3>
                     <span class="specialty-tag">ENDODONTIST</span>
                     <p>Root canal specialist focusing on painless therapy and saving natural teeth from extraction.</p>
                 </div>
-                <!-- Member 6 -->
                 <div class="team-card reveal">
                     <div class="team-avatar">😬</div>
                     <h3>Dr. Elena Garcia</h3>
@@ -704,13 +672,13 @@
                     <p>Focuses on therapeutic injections and oral appliances to relieve chronic jaw pain and clicking.</p>
                 </div>
             </div>
-            
             <div style="text-align: center; margin-top: 48px;" class="reveal">
                 <a href="#book" class="btn btn-dark">Book with a Specialist →</a>
             </div>
         </div>
     </section>
 
+    <!-- TESTIMONIALS -->
     <section id="testimonials" style="background: var(--navy); color: white;">
         <div class="container">
             <div class="reveal" style="text-align: center;">
@@ -725,10 +693,7 @@
                     <blockquote>"Finding a dentist who can handle a scared child is hard. Dr. Lean at the QC branch was amazing! My daughter didn't even cry during her extraction."</blockquote>
                     <div class="author-row">
                         <div class="author-circle">M</div>
-                        <div class="author-info">
-                            <h5>Michelle Sy</h5>
-                            <span>QC North Branch</span>
-                        </div>
+                        <div class="author-info"><h5>Michelle Sy</h5><span>QC North Branch</span></div>
                     </div>
                 </div>
                 <div class="testi-card reveal">
@@ -736,10 +701,7 @@
                     <blockquote>"I had 4 implants done with Dr. Ivan. The sedation dentistry made the whole thing a breeze. I finally have my confidence back. Highly recommended!"</blockquote>
                     <div class="author-row">
                         <div class="author-circle">R</div>
-                        <div class="author-info">
-                            <h5>Ricardo Gomez</h5>
-                            <span>Makati Central Branch</span>
-                        </div>
+                        <div class="author-info"><h5>Ricardo Gomez</h5><span>Makati Central Branch</span></div>
                     </div>
                 </div>
                 <div class="testi-card reveal">
@@ -747,16 +709,14 @@
                     <blockquote>"Fast, clean, and very professional. The aesthetic team in Makati did my veneers and they look so natural. No more hiding my smile!"</blockquote>
                     <div class="author-row">
                         <div class="author-circle">J</div>
-                        <div class="author-info">
-                            <h5>Jessica Tan</h5>
-                            <span>Makati Central Branch</span>
-                        </div>
+                        <div class="author-info"><h5>Jessica Tan</h5><span>Makati Central Branch</span></div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
+    <!-- LOCATIONS -->
     <section id="locations">
         <div class="container">
             <div class="reveal">
@@ -767,9 +727,7 @@
 
             <div class="loc-grid">
                 <div class="loc-card reveal">
-                    <div class="loc-map-placeholder">
-                        <span>📍 Makati Central</span>
-                    </div>
+                    <div class="loc-map-placeholder"><span>📍 Makati Central</span></div>
                     <div class="loc-body">
                         <h3>Makati Central</h3>
                         <p>Unit 204, Global Tower, Ayala Ave, Makati City, 1226 Metro Manila</p>
@@ -779,9 +737,7 @@
                     </div>
                 </div>
                 <div class="loc-card reveal">
-                    <div class="loc-map-placeholder" style="background: linear-gradient(135deg, var(--navy-mid), var(--gold));">
-                        <span>📍 Quezon City North</span>
-                    </div>
+                    <div class="loc-map-placeholder" style="background: linear-gradient(135deg, var(--navy-mid), var(--gold));"><span>📍 Quezon City North</span></div>
                     <div class="loc-body">
                         <h3>Quezon City North</h3>
                         <p>12F Sky Plaza, North Ave cor. EDSA, Quezon City, 1100 Metro Manila</p>
@@ -794,6 +750,7 @@
         </div>
     </section>
 
+    <!-- FOOTER -->
     <footer>
         <div class="container">
             <div class="footer-grid">
@@ -806,8 +763,6 @@
                     <div class="socials">
                         <a href="https://www.facebook.com/ivanmark.escudero.75">FB</a>
                         <a href="https://www.instagram.com/nihexist/">IG</a>
-                        <a href="#">TT</a>
-                        <a href="#">YT</a>
                     </div>
                 </div>
                 <div class="footer-col">
@@ -817,7 +772,6 @@
                         <li><a href="#team">Our Team</a></li>
                         <li><a href="#locations">Locations</a></li>
                         <li><a href="#testimonials">Reviews</a></li>
-                        <li><a href="#book">Book Appointment</a></li>
                     </ul>
                 </div>
                 <div class="footer-col">
@@ -827,7 +781,6 @@
                         <li><a href="#services">Cosmetic Care</a></li>
                         <li><a href="#services">Dental Implants</a></li>
                         <li><a href="#services">Root Canals</a></li>
-                        <li><a href="#services">Pedodontics</a></li>
                     </ul>
                 </div>
                 <div class="footer-col">
@@ -835,8 +788,6 @@
                     <ul>
                         <li><a href="tel:09626292510">📞 0962 629 2510</a></li>
                         <li><a href="mailto:hello@yourdental.ph">✉️ hello@yourdental.ph</a></li>
-                        <li><a href="#">📍 Ayala Ave, Makati City</a></li>
-                        <li><a href="#">📍 North Ave, Quezon City</a></li>
                     </ul>
                 </div>
             </div>
@@ -847,69 +798,41 @@
         </div>
     </footer>
 
-    <!-- Modals & Toasts -->
+    <!-- MODAL & TOAST -->
     <div class="modal-overlay" id="successModal" onclick="closeModal()">
         <div class="modal-card" onclick="event.stopPropagation()">
             <span class="check-icon">✅</span>
             <h3>Appointment Requested!</h3>
-            <p>Thank you for choosing us. One of our patient coordinators will call you within the next 2 hours to confirm your slot.</p>
+            <p>Thank you for choosing us. One of our coordinators will call you within 2 hours to confirm your slot.</p>
             <button class="btn btn-dark" onclick="closeModal()">Close</button>
         </div>
     </div>
 
-    <div class="toast" id="toast">
-        <span id="toastIcon">ℹ️</span>
-        <span id="toastMsg">Message goes here</span>
-    </div>
+    <div class="toast" id="toast"><span id="toastIcon">ℹ️</span><span id="toastMsg">Message</span></div>
 
     <script>
         // Navbar scroll effect
         window.addEventListener('scroll', () => {
             const nav = document.getElementById('navbar');
-            if (window.scrollY > 50) {
-                nav.classList.add('scrolled');
-            } else {
-                nav.classList.remove('scrolled');
-            }
+            if (window.scrollY > 30) { nav.classList.add('scrolled'); } 
+            else { nav.classList.remove('scrolled'); }
         });
 
         // Mobile Menu
-        function toggleMenu() {
-            const drawer = document.getElementById('mobileDrawer');
-            drawer.classList.toggle('active');
-        }
+        function toggleMenu() { document.getElementById('mobileDrawer').classList.toggle('active'); }
 
-        // Form Validation & Submission
+        // Booking Form Handling
         const bookingForm = document.getElementById('bookingForm');
         let attempts = 0;
 
-        // Set min date for picker
-        const dateInput = document.getElementById('date');
-        const tomorrow = new Date();
-        tomorrow.setDate(tomorrow.getDate() + 1);
-        dateInput.min = tomorrow.toISOString().split('T')[0];
-
         bookingForm.addEventListener('submit', (e) => {
             e.preventDefault();
+            if (attempts >= 5) { showToast("Too many attempts. Please wait.", "error"); return; }
             
-            if (attempts >= 5) {
-                showToast("Too many attempts. Please try again later.", "error");
-                return;
-            }
-
-            const phone = document.getElementById('phone').value;
-            const phoneRegex = /^09\d{9}$/;
-
-            if (!phoneRegex.test(phone)) {
-                showToast("Please enter a valid PH mobile number (09XXXXXXXXX)", "error");
-                return;
-            }
-
             const btn = document.getElementById('submitBtn');
             btn.innerText = "Processing...";
             btn.disabled = true;
 
-            // Simulate network delay
             setTimeout(() => {
                 attempts++;
                 document.getElementById('successModal').classList.add('active');
@@ -919,65 +842,21 @@
             }, 1200);
         });
 
-        function closeModal() {
-            document.getElementById('successModal').classList.remove('active');
-        }
+        function closeModal() { document.getElementById('successModal').classList.remove('active'); }
 
         function showToast(msg, type = "success") {
             const toast = document.getElementById('toast');
-            const toastMsg = document.getElementById('toastMsg');
-            const toastIcon = document.getElementById('toastIcon');
-            
-            toastMsg.innerText = msg;
-            toastIcon.innerText = type === "error" ? "❌" : "✅";
-            
-            if(type === "error") toast.classList.add('error');
-            else toast.classList.remove('error');
-
-            toast.classList.add('active');
-            setTimeout(() => {
-                toast.classList.remove('active');
-            }, 4000);
+            document.getElementById('toastMsg').innerText = msg;
+            toast.className = `toast active ${type === 'error' ? 'error' : ''}`;
+            setTimeout(() => { toast.classList.remove('active'); }, 4000);
         }
 
-        // Intersection Observer for fade-in
-        const observerOptions = { threshold: 0.1 };
+        // Fade-in animations
         const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('active');
-                }
-            });
-        }, observerOptions);
+            entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); });
+        }, { threshold: 0.1 });
 
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-    </script>
-
-    <!-- Schema.org JSON-LD -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "Dentist",
-      "name": "Your Dental Business",
-      "image": "https://yourdentalbusiness.com/logo.png",
-      "address": {
-        "@type": "PostalAddress",
-        "streetAddress": "Ayala Ave",
-        "addressLocality": "Makati",
-        "addressRegion": "Metro Manila",
-        "postalCode": "1226",
-        "addressCountry": "PH"
-      },
-      "telephone": "+639626292510",
-      "url": "https://yourdentalbusiness.com",
-      "openingHours": "Mo-Sa 09:00-18:00",
-      "priceRange": "$$",
-      "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": "4.9",
-        "reviewCount": "5000"
-      }
-    }
     </script>
 </body>
 </html>
