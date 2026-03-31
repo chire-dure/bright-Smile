@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- SEO & META -->
+    <title>BrightSmile Dental Mandaluyong | Best Dental Clinic in Mandaluyong City</title>
+    <meta name="description" content="Experience pain-free dental care at BrightSmile Mandaluyong. From affordable braces to teeth whitening, our expert dentists near EDSA provide top-tier oral care. Book your FREE consultation today!">
+    <link rel="canonical" href="https://www.brightsmiledentalmandaluyong.com">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="BrightSmile Dental Mandaluyong | Your Local Expert Dentist">
+    <meta property="og:description" content="Affordable braces, implants, and teeth whitening in the heart of Mandaluyong. We accept GCash and Installments!">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.brightsmiledentalmandaluyong.com">
+    
+    <!-- JSON-LD Local Business Schema -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Dentist",
+      "name": "BrightSmile Dental Clinic Mandaluyong",
+      "image": "https://www.brightsmiledentalmandaluyong.com/logo.png",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Unit 204, Light Residences, EDSA corner Madison St.",
+        "addressLocality": "Mandaluyong City",
+        "addressRegion": "Metro Manila",
+        "postalCode": "1550",
+        "addressCountry": "PH"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 14.5768,
+        "longitude": 121.0475
+      },
+      "url": "https://www.brightsmiledentalmandaluyong.com",
+      "telephone": "+639171234567",
+      "openingHoursSpecification": [
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+          "opens": "09:00",
+          "closes": "18:00"
+        }
+      ],
+      "priceRange": "₱₱"
+    }
+    </script>
+
+    <!-- External Assets -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: '#1A6EBD',
+                        secondary: '#F4F9FF',
+                        accent: '#FF6B35',
+                        dark: '#0F172A'
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                    },
+                    animation: {
+                        'float': 'float 3s ease-in-out infinite',
+                        'marquee': 'marquee 25s linear infinite',
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        },
+                        marquee: {
+                            '0%': { transform: 'translateX(0%)' },
+                            '100%': { transform: 'translateX(-50%)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s ease-out; }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+        .custom-shadow { box-shadow: 0 10px 30px -5px rgba(26, 110, 189, 0.1); }
+        .before-after-container:hover .after-image { width: 100% !important; }
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+    </style>
+</head>
+<body class="font-sans text-dark bg-white overflow-x-hidden">
+
+    <!-- NAVIGATION -->
+    <nav id="navbar" class="fixed w-full z-50 transition-all duration-300 py-4 px-6 md:px-12 flex justify-between items-center bg-transparent">
+        <a href="#" class="flex items-center gap-2 group">
+            <div class="bg-brand text-white p-2 rounded-lg group-hover:rotate-12 transition-transform">
+                <i class="fas fa-tooth text-xl"></i>
+            </div>
+            <span class="text-xl font-extrabold tracking-tight text-brand">BrightSmile <span class="text-accent">Mandaluyong</span></span>
+        </a>
+
+        <!-- Desktop Links -->
+        <div class="hidden md:flex items-center gap-8 font-semibold text-sm">
+            <a href="#services" class="hover:text-brand transition">Services</a>
+            <a href="#why-us" class="hover:text-brand transition">About</a>
+            <a href="#promo" class="hover:text-brand transition">Promos</a>
+            <a href="#testimonials" class="hover:text-brand transition">Reviews</a>
+            <a href="#booking" class="bg-accent text-white px-6 py-3 rounded-full hover:shadow-lg transition transform hover:-translate-y-1">Book Appointment</a>
+        </div>
+
+        <!-- Mobile Toggle -->
+        <button id="mobile-menu-btn" class="md:hidden text-brand text-2xl">
+            <i class="fas fa-bars"></i>
+        </button>
+    </nav>
+
+    <!-- Mobile Drawer -->
+    <div id="mobile-menu" class="fixed inset-0 bg-white z-[60] flex flex-col items-center justify-center gap-8 text-2xl font-bold translate-x-full transition-transform duration-300">
+        <button id="close-menu" class="absolute top-6 right-6 text-3xl text-brand"><i class="fas fa-times"></i></button>
+        <a href="#services" class="mobile-link">Services</a>
+        <a href="#why-us" class="mobile-link">About Us</a>
+        <a href="#promo" class="mobile-link">Promos</a>
+        <a href="#testimonials" class="mobile-link">Testimonials</a>
+        <a href="#booking" class="bg-accent text-white px-8 py-4 rounded-full">Book Now</a>
+    </div>
+
+    <!-- HERO SECTION -->
+    <section class="relative min-h-screen pt-32 pb-20 px-6 md:px-12 flex flex-col md:flex-row items-center overflow-hidden">
+        <!-- Background Decor -->
+        <div class="absolute top-0 right-0 w-1/3 h-1/2 bg-secondary rounded-bl-[100px] -z-10"></div>
+        <div class="absolute -bottom-20 -left-20 w-64 h-64 bg-blue-50 rounded-full blur-3xl -z-10"></div>
+
+        <div class="md:w-1/2 reveal">
+            <span class="bg-blue-100 text-brand px-4 py-1.5 rounded-full text-sm font-bold uppercase tracking-wider mb-6 inline-block">
+                📍 Conveniently located near EDSA
+            </span>
+            <h1 class="text-4xl md:text-6xl font-extrabold leading-tight mb-6">
+                Mandaluyong's Most Trusted <br>
+                <span class="text-brand">Smile Makeover</span> Clinic
+            </h1>
+            <p class="text-gray-600 text-lg mb-8 max-w-lg">
+                Achieve your dream smile with pain-free procedures and affordable payment plans. We combine modern technology with a gentle touch right in the heart of Mandaluyong.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 mb-10">
+                <a href="#booking" class="bg-accent text-white px-8 py-4 rounded-xl font-bold text-lg text-center hover:bg-orange-600 transition shadow-xl shadow-orange-200">
+                    Book a FREE Consultation
+                </a>
+                <a href="#services" class="border-2 border-brand text-brand px-8 py-4 rounded-xl font-bold text-lg text-center hover:bg-brand hover:text-white transition">
+                    See Our Services
+                </a>
+            </div>
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 text-xs font-bold text-gray-500">
+                <div class="flex items-center gap-2"><i class="fas fa-check-circle text-green-500 text-base"></i> PHILHEALTH</div>
+                <div class="flex items-center gap-2"><i class="fas fa-check-circle text-green-500 text-base"></i> 10+ YRS EXP.</div>
+                <div class="flex items-center gap-2"><i class="fas fa-check-circle text-green-500 text-base"></i> 500+ PATIENTS</div>
+                <div class="flex items-center gap-2"><i class="fas fa-check-circle text-green-500 text-base"></i> OPEN SATURDAYS</div>
+            </div>
+        </div>
+
+        <div class="md:w-1/2 relative mt-16 md:mt-0 flex justify-center reveal">
+            <div class="animate-float relative z-10">
+                <!-- Tooth Illustration (SVG Wrapper) -->
+                <svg width="400" height="400" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="100" cy="100" r="80" fill="#1A6EBD" opacity="0.1" />
+                    <path d="M100 30C75 30 65 50 65 75C65 110 80 145 100 170C120 145 135 110 135 75C135 50 125 30 100 30Z" fill="#fff" stroke="#1A6EBD" stroke-width="4"/>
+                    <path d="M85 70C85 70 90 60 100 60C110 60 115 70 115 70" stroke="#1A6EBD" stroke-width="3" fill="none" stroke-linecap="round"/>
+                    <circle cx="85" cy="85" r="5" fill="#1A6EBD" />
+                    <circle cx="115" cy="85" r="5" fill="#1A6EBD" />
+                    <path d="M80 110Q100 130 120 110" stroke="#FF6B35" stroke-width="4" fill="none" stroke-linecap="round"/>
+                </svg>
+            </div>
+            <!-- Floating Badges -->
+            <div class="absolute top-10 left-10 bg-white p-4 rounded-2xl shadow-2xl animate-bounce">
+                <i class="fas fa-star text-yellow-400"></i> <span class="font-bold">4.9 Google Rating</span>
+            </div>
+            <div class="absolute bottom-10 right-10 bg-white p-4 rounded-2xl shadow-2xl pulse-slow">
+                <span class="font-bold">Affordable Braces</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- SOCIAL PROOF TICKER -->
+    <div class="bg-brand py-4 overflow-hidden border-y-4 border-accent">
+        <div class="flex animate-marquee whitespace-nowrap items-center text-white font-bold gap-12">
+            <span class="text-lg">⭐ Maria from Mandaluyong: "Best dental experience I've ever had!" ⭐</span>
+            <span class="text-lg">✅ Braces starting at ₱5,000 downpayment ✅</span>
+            <span class="text-lg">⭐ Joshua from Wack-Wack: "Extremely professional and pain-free!" ⭐</span>
+            <span class="text-lg">✅ Free Consultation for first 50 patients this month ✅</span>
+            <span class="text-lg">⭐ Maria from Mandaluyong: "Best dental experience I've ever had!" ⭐</span>
+            <span class="text-lg">✅ Braces starting at ₱5,000 downpayment ✅</span>
+        </div>
+    </div>
+
+    <!-- SERVICES SECTION -->
+    <section id="services" class="py-24 px-6 md:px-12 bg-gray-50">
+        <div class="text-center mb-16 reveal">
+            <h2 class="text-4xl font-extrabold mb-4">Complete Dental Care for Your Family</h2>
+            <p class="text-gray-500 max-w-2xl mx-auto">From basic cleaning to complex oral surgeries, our Mandaluyong clinic is equipped with the latest dental technology.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 reveal">
+            <!-- Service 1 -->
+            <div class="bg-white p-8 rounded-2xl border-t-4 border-brand custom-shadow hover:-translate-y-2 transition duration-300 group">
+                <div class="text-brand text-4xl mb-6 group-hover:scale-110 transition"><i class="fas fa-wand-magic-sparkles"></i></div>
+                <h3 class="text-xl font-bold mb-3">Teeth Whitening</h3>
+                <p class="text-gray-500 text-sm mb-4">Zoom in-office bleaching for instant 8-shade brighter results.</p>
+                <p class="text-brand font-bold mb-6">Starting at ₱4,500</p>
+                <a href="#booking" class="text-accent font-bold flex items-center gap-2 hover:gap-4 transition-all">Book Now <i class="fas fa-arrow-right"></i></a>
+            </div>
+            <!-- Service 2 -->
+            <div class="bg-white p-8 rounded-2xl border-t-4 border-brand custom-shadow hover:-translate-y-2 transition duration-300 group">
+                <div class="text-brand text-4xl mb-6 group-hover:scale-110 transition"><i class="fas fa-teeth"></i></div>
+                <h3 class="text-xl font-bold mb-3">Dental Braces</h3>
+                <p class="text-gray-500 text-sm mb-4">Metal, ceramic, and self-ligating braces with easy installments.</p>
+                <p class="text-brand font-bold mb-6">₱5,000 Initial Down</p>
+                <a href="#booking" class="text-accent font-bold flex items-center gap-2 hover:gap-4 transition-all">Book Now <i class="fas fa-arrow-right"></i></a>
+            </div>
+            <!-- Service 3 -->
+            <div class="bg-white p-8 rounded-2xl border-t-4 border-brand custom-shadow hover:-translate-y-2 transition duration-300 group">
+                <div class="text-brand text-4xl mb-6 group-hover:scale-110 transition"><i class="fas fa-tooth"></i></div>
+                <h3 class="text-xl font-bold mb-3">Tooth Extraction</h3>
+                <p class="text-gray-500 text-sm mb-4">Pain-free simple and surgical wisdom tooth removals.</p>
+                <p class="text-brand font-bold mb-6">Starting at ₱800</p>
+                <a href="#booking" class="text-accent font-bold flex items-center gap-2 hover:gap-4 transition-all">Book Now <i class="fas fa-arrow-right"></i></a>
+            </div>
+            <!-- Service 4 -->
+            <div class="bg-white p-8 rounded-2xl border-t-4 border-brand custom-shadow hover:-translate-y-2 transition duration-300 group">
+                <div class="text-brand text-4xl mb-6 group-hover:scale-110 transition"><i class="fas fa-microscope"></i></div>
+                <h3 class="text-xl font-bold mb-3">Root Canal</h3>
+                <p class="text-gray-500 text-sm mb-4">Save your natural teeth with our specialized nerve treatments.</p>
+                <p class="text-brand font-bold mb-6">Starting at ₱6,000</p>
+                <a href="#booking" class="text-accent font-bold flex items-center gap-2 hover:gap-4 transition-all">Book Now <i class="fas fa-arrow-right"></i></a>
+            </div>
+            <!-- Service 5 -->
+            <div class="bg-white p-8 rounded-2xl border-t-4 border-brand custom-shadow hover:-translate-y-2 transition duration-300 group">
+                <div class="text-brand text-4xl mb-6 group-hover:scale-110 transition"><i class="fas fa-fill-drip"></i></div>
+                <h3 class="text-xl font-bold mb-3">Dental Implants</h3>
+                <p class="text-gray-500 text-sm mb-4">Permanent tooth replacement that looks and feels natural.</p>
+                <p class="text-brand font-bold mb-6">Inquire for Pricing</p>
+                <a href="#booking" class="text-accent font-bold flex items-center gap-2 hover:gap-4 transition-all">Book Now <i class="fas fa-arrow-right"></i></a>
+            </div>
+            <!-- Service 6 -->
+            <div class="bg-white p-8 rounded-2xl border-t-4 border-brand custom-shadow hover:-translate-y-2 transition duration-300 group">
+                <div class="text-brand text-4xl mb-6 group-hover:scale-110 transition"><i class="fas fa-sparkles"></i></div>
+                <h3 class="text-xl font-bold mb-3">Veneers</h3>
+                <p class="text-gray-500 text-sm mb-4">High-quality porcelain or composite for a celebrity smile.</p>
+                <p class="text-brand font-bold mb-6">Starting at ₱3,500/tooth</p>
+                <a href="#booking" class="text-accent font-bold flex items-center gap-2 hover:gap-4 transition-all">Book Now <i class="fas fa-arrow-right"></i></a>
+            </div>
+            <!-- Service 7 -->
+            <div class="bg-white p-8 rounded-2xl border-t-4 border-brand custom-shadow hover:-translate-y-2 transition duration-300 group">
+                <div class="text-brand text-4xl mb-6 group-hover:scale-110 transition"><i class="fas fa-child"></i></div>
+                <h3 class="text-xl font-bold mb-3">Pedia Dentistry</h3>
+                <p class="text-gray-500 text-sm mb-4">Kid-friendly environment to make children love the dentist.</p>
+                <p class="text-brand font-bold mb-6">Starting at ₱700</p>
+                <a href="#booking" class="text-accent font-bold flex items-center gap-2 hover:gap-4 transition-all">Book Now <i class="fas fa-arrow-right"></i></a>
+            </div>
+            <!-- Service 8 -->
+            <div class="bg-white p-8 rounded-2xl border-t-4 border-brand custom-shadow hover:-translate-y-2 transition duration-300 group">
+                <div class="text-brand text-4xl mb-6 group-hover:scale-110 transition"><i class="fas fa-pump-soap"></i></div>
+                <h3 class="text-xl font-bold mb-3">Oral Prophylaxis</h3>
+                <p class="text-gray-500 text-sm mb-4">Routine professional cleaning to prevent cavities and gum disease.</p>
+                <p class="text-brand font-bold mb-6">Starting at ₱800</p>
+                <a href="#booking" class="text-accent font-bold flex items-center gap-2 hover:gap-4 transition-all">Book Now <i class="fas fa-arrow-right"></i></a>
+            </div>
+        </div>
+    </section>
+
+    <!-- WHY CHOOSE US SECTION -->
+    <section id="why-us" class="py-24 px-6 md:px-12 overflow-hidden">
+        <div class="flex flex-col lg:flex-row items-center gap-16">
+            <div class="lg:w-1/2 reveal">
+                <h2 class="text-4xl font-extrabold mb-8">Why Mandaluyong Families Trust BrightSmile</h2>
+                <div class="space-y-8">
+                    <div class="flex gap-6">
+                        <div class="flex-shrink-0 w-14 h-14 bg-secondary rounded-2xl flex items-center justify-center text-brand text-2xl">
+                            <i class="fas fa-location-dot"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-xl font-bold mb-2">Prime Location near EDSA</h4>
+                            <p class="text-gray-500">Located at the center of Metro Manila. Accessible via MRT Boni, Bus, or Grab. Free parking available for patients!</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-6">
+                        <div class="flex-shrink-0 w-14 h-14 bg-orange-50 rounded-2xl flex items-center justify-center text-accent text-2xl">
+                            <i class="fas fa-wallet"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-xl font-bold mb-2">Flexible Payment Plans</h4>
+                            <p class="text-gray-500">We accept GCash, Maya, and all major Credit Cards. 0% Installment plans available for Braces and Implants.</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-6">
+                        <div class="flex-shrink-0 w-14 h-14 bg-blue-50 rounded-2xl flex items-center justify-center text-blue-500 text-2xl">
+                            <i class="fas fa-comment"></i>
+                        </div>
+                        <div>
+                            <h4 class="text-xl font-bold mb-2">English & Filipino Speaking</h4>
+                            <p class="text-gray-500">Clear communication is key. Our friendly staff ensures you understand every step of your treatment in your preferred language.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="lg:w-1/2 grid grid-cols-2 gap-4 reveal">
+                <div class="space-y-4 pt-12">
+                    <div class="h-64 bg-gray-200 rounded-3xl overflow-hidden relative">
+                        <div class="absolute inset-0 bg-gradient-to-br from-brand to-transparent opacity-40"></div>
+                        <img src="https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?auto=format&fit=crop&q=80&w=400" alt="Clinic Equipment" class="w-full h-full object-cover">
+                    </div>
+                    <div class="bg-accent p-6 rounded-3xl text-white">
+                        <p class="text-3xl font-bold">100%</p>
+                        <p class="text-sm">Sterilized & Safe</p>
+                    </div>
+                </div>
+                <div class="space-y-4">
+                    <div class="bg-brand p-6 rounded-3xl text-white">
+                        <p class="text-3xl font-bold">10k+</p>
+                        <p class="text-sm">Smiles Created</p>
+                    </div>
+                    <div class="h-80 bg-gray-200 rounded-3xl overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1629909613654-28e377c37b09?auto=format&fit=crop&q=80&w=400" alt="Modern Clinic" class="w-full h-full object-cover">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PROMO BANNER -->
+    <section id="promo" class="py-12 px-6">
+        <div class="max-w-6xl mx-auto bg-brand rounded-[2rem] p-8 md:p-16 text-white text-center relative overflow-hidden border-4 border-dashed border-accent animate-pulse-slow">
+            <div class="relative z-10">
+                <h2 class="text-3xl md:text-5xl font-extrabold mb-4">✨ LIMITED MONTHLY OFFER ✨</h2>
+                <p class="text-xl mb-8 opacity-90 font-medium">FREE Oral Consultation + Digital X-Ray with every cleaning!</p>
+                <div class="flex justify-center gap-4 mb-8">
+                    <div class="bg-white/20 backdrop-blur-md p-4 rounded-xl min-w-[80px]">
+                        <span id="days" class="text-3xl font-bold block text-accent">06</span>
+                        <span class="text-xs uppercase">Days</span>
+                    </div>
+                    <div class="bg-white/20 backdrop-blur-md p-4 rounded-xl min-w-[80px]">
+                        <span id="hours" class="text-3xl font-bold block">23</span>
+                        <span class="text-xs uppercase">Hrs</span>
+                    </div>
+                    <div class="bg-white/20 backdrop-blur-md p-4 rounded-xl min-w-[80px]">
+                        <span id="mins" class="text-3xl font-bold block">59</span>
+                        <span class="text-xs uppercase">Min</span>
+                    </div>
+                </div>
+                <a href="#booking" class="bg-white text-brand px-10 py-4 rounded-full font-bold text-lg hover:bg-secondary transition-all inline-block shadow-2xl">
+                    Claim This Promo Now
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- TESTIMONIALS -->
+    <section id="testimonials" class="py-24 px-6 md:px-12 bg-secondary">
+        <div class="text-center mb-16 reveal">
+            <h2 class="text-4xl font-extrabold mb-4">Patient Success Stories</h2>
+            <p class="text-gray-500">Read why we are the top-rated clinic in Mandaluyong City.</p>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 reveal">
+            <!-- Review 1 -->
+            <div class="bg-white p-8 rounded-2xl shadow-sm relative">
+                <div class="text-accent mb-4"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                <p class="italic text-gray-600 mb-6">"Sobrang bait ni Dra! I used to be so scared of dentists but she made me feel comfortable. The clinic is so clean and modern. Best experience!"</p>
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center font-bold text-brand">AC</div>
+                    <div>
+                        <p class="font-bold">Angelica Cruz</p>
+                        <p class="text-xs text-gray-400">Braces Patient from Boni Ave.</p>
+                    </div>
+                </div>
+            </div>
+            <!-- Review 2 -->
+            <div class="bg-white p-8 rounded-2xl shadow-sm">
+                <div class="text-accent mb-4"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                <p class="italic text-gray-600 mb-6">"Super sulit! Affordable whitening compared to others in Mandaluyong. It's been 6 months and my teeth are still bright. Highly recommended!"</p>
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center font-bold text-brand">RM</div>
+                    <div>
+                        <p class="font-bold">Ricardo Mercado</p>
+                        <p class="text-xs text-gray-400">Whitening Patient from Pioneer</p>
+                    </div>
+                </div>
+            </div>
+            <!-- Review 3 -->
+            <div class="bg-white p-8 rounded-2xl shadow-sm">
+                <div class="text-accent mb-4"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                <p class="italic text-gray-600 mb-6">"My daughter actually enjoys going to the dentist now. They have cartoons and a very gentle approach. Perfect for parents in the area."</p>
+                <div class="flex items-center gap-4">
+                    <div class="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center font-bold text-brand">LG</div>
+                    <div>
+                        <p class="font-bold">Liza Gomez</p>
+                        <p class="text-xs text-gray-400">Mother of 2 from Wack-Wack</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="text-center mt-12">
+            <a href="#" class="text-brand font-bold underline">Read more 5-star reviews on Facebook</a>
+        </div>
+    </section>
+
+    <!-- MEET THE DENTIST -->
+    <section class="py-24 px-6 md:px-12 bg-white">
+        <div class="flex flex-col md:flex-row items-center gap-16 max-w-6xl mx-auto">
+            <div class="md:w-1/2 reveal">
+                <div class="relative">
+                    <div class="w-full aspect-[4/5] bg-gradient-to-br from-brand to-blue-300 rounded-[3rem] overflow-hidden flex items-end justify-center">
+                        <i class="fas fa-user-md text-[12rem] text-white/50 mb-[-2rem]"></i>
+                    </div>
+                    <div class="absolute -bottom-6 -right-6 bg-accent text-white p-6 rounded-3xl font-bold shadow-xl">
+                        10+ Years of<br>Excellence
+                    </div>
+                </div>
+            </div>
+            <div class="md:w-1/2 reveal">
+                <h4 class="text-brand font-bold uppercase tracking-widest mb-4">Expert Care</h4>
+                <h2 class="text-4xl font-extrabold mb-6">Meet Dr. Elena Santos, DDS</h2>
+                <p class="text-gray-600 text-lg mb-6">
+                    A proud alumna of UP Manila, Dr. Elena has dedicated over a decade to providing high-quality dental care to the Mandaluyong community. She specializes in Orthodontics and Cosmetic Dentistry.
+                </p>
+                <p class="text-gray-600 text-lg mb-8">
+                    "My goal is to make every patient feel like family. We don't just fix teeth; we restore confidence through healthy, beautiful smiles."
+                </p>
+                <div class="flex flex-wrap gap-3">
+                    <span class="bg-gray-100 px-4 py-2 rounded-full text-sm font-semibold">PDA Member</span>
+                    <span class="bg-gray-100 px-4 py-2 rounded-full text-sm font-semibold">UP Manila Alumna</span>
+                    <span class="bg-gray-100 px-4 py-2 rounded-full text-sm font-semibold">ISO Certified Clinic</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- BEFORE & AFTER GALLERY -->
+    <section class="py-24 px-6 md:px-12 bg-gray-50">
+        <div class="text-center mb-16 reveal">
+            <h2 class="text-4xl font-extrabold mb-4">The BrightSmile Transformation</h2>
+            <p class="text-gray-500">Real results from our actual patients. Hover to see the 'After'.</p>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 reveal">
+            <!-- Card 1 -->
+            <div class="relative group h-64 rounded-2xl overflow-hidden before-after-container">
+                <img src="https://images.unsplash.com/photo-1593054941142-550aac6683d3?auto=format&fit=crop&q=80&w=400" alt="After" class="absolute inset-0 w-0 h-full object-cover z-10 transition-all duration-500 after-image brightness-110">
+                <img src="https://images.unsplash.com/photo-1593054941142-550aac6683d3?auto=format&fit=crop&q=80&w=400" alt="Before" class="absolute inset-0 w-full h-full object-cover grayscale opacity-50">
+                <div class="absolute bottom-4 left-4 z-20 bg-brand text-white px-3 py-1 rounded-md text-xs font-bold">Teeth Whitening</div>
+            </div>
+            <!-- Card 2 -->
+            <div class="relative group h-64 rounded-2xl overflow-hidden before-after-container">
+                <img src="https://images.unsplash.com/photo-1606811971618-4486d14f3f99?auto=format&fit=crop&q=80&w=400" alt="After" class="absolute inset-0 w-0 h-full object-cover z-10 transition-all duration-500 after-image">
+                <img src="https://images.unsplash.com/photo-1606811971618-4486d14f3f99?auto=format&fit=crop&q=80&w=400" alt="Before" class="absolute inset-0 w-full h-full object-cover grayscale opacity-50">
+                <div class="absolute bottom-4 left-4 z-20 bg-brand text-white px-3 py-1 rounded-md text-xs font-bold">Dental Braces</div>
+            </div>
+            <!-- Card 3 -->
+            <div class="relative group h-64 rounded-2xl overflow-hidden before-after-container">
+                <img src="https://images.unsplash.com/photo-1588776814222-2608d51953f7?auto=format&fit=crop&q=80&w=400" alt="After" class="absolute inset-0 w-0 h-full object-cover z-10 transition-all duration-500 after-image">
+                <img src="https://images.unsplash.com/photo-1588776814222-2608d51953f7?auto=format&fit=crop&q=80&w=400" alt="Before" class="absolute inset-0 w-full h-full object-cover grayscale opacity-50">
+                <div class="absolute bottom-4 left-4 z-20 bg-brand text-white px-3 py-1 rounded-md text-xs font-bold">Veneers</div>
+            </div>
+            <!-- Card 4 -->
+            <div class="relative group h-64 rounded-2xl overflow-hidden before-after-container">
+                <img src="https://images.unsplash.com/photo-1598256989800-fe5f95da9787?auto=format&fit=crop&q=80&w=400" alt="After" class="absolute inset-0 w-0 h-full object-cover z-10 transition-all duration-500 after-image">
+                <img src="https://images.unsplash.com/photo-1598256989800-fe5f95da9787?auto=format&fit=crop&q=80&w=400" alt="Before" class="absolute inset-0 w-full h-full object-cover grayscale opacity-50">
+                <div class="absolute bottom-4 left-4 z-20 bg-brand text-white px-3 py-1 rounded-md text-xs font-bold">Fillings</div>
+            </div>
+        </div>
+        <div class="text-center mt-12">
+            <a href="#" class="bg-dark text-white px-8 py-3 rounded-full font-bold hover:bg-gray-800 transition">See Full Gallery on Instagram</a>
+        </div>
+    </section>
+
+    <!-- BOOKING SECTION -->
+    <section id="booking" class="py-24 px-6 md:px-12 bg-white">
+        <div class="max-w-7xl mx-auto flex flex-col lg:flex-row gap-16">
+            <div class="lg:w-3/5 reveal">
+                <h2 class="text-4xl font-extrabold mb-4">Book Your Appointment Today</h2>
+                <p class="text-gray-500 mb-10">We respond within 1 hour during clinic hours. No waiting line, no hassle.</p>
+                
+                <form id="appointment-form" class="space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-bold mb-2">Full Name *</label>
+                            <input type="text" required placeholder="Juana Dela Cruz" class="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-bold mb-2">Phone Number *</label>
+                            <input type="tel" required placeholder="0917 XXX XXXX" pattern="[0-9]{11}" class="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand">
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-bold mb-2">Service Interested In</label>
+                            <select class="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-brand">
+                                <option>Teeth Whitening</option>
+                                <option>Dental Braces</option>
+                                <option>Extraction</option>
+                                <option>Root Canal</option>
+                                <option>Implants</option>
+                                <option>Veneers</option>
+                                <option>Cleaning</option>
+                                <option>Pedia Checkup</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-bold mb-2">Preferred Date</label>
+                            <input type="date" class="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-brand">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold mb-4">Preferred Time</label>
+                        <div class="flex flex-wrap gap-4">
+                            <label class="flex items-center gap-2 cursor-pointer bg-gray-50 px-6 py-3 rounded-xl border border-gray-200 hover:border-brand transition">
+                                <input type="radio" name="time" value="morning" class="accent-brand"> Morning
+                            </label>
+                            <label class="flex items-center gap-2 cursor-pointer bg-gray-50 px-6 py-3 rounded-xl border border-gray-200 hover:border-brand transition">
+                                <input type="radio" name="time" value="afternoon" class="accent-brand"> Afternoon
+                            </label>
+                            <label class="flex items-center gap-2 cursor-pointer bg-gray-50 px-6 py-3 rounded-xl border border-gray-200 hover:border-brand transition">
+                                <input type="radio" name="time" value="evening" class="accent-brand"> Evening
+                            </label>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold mb-2">Any specific concerns?</label>
+                        <textarea rows="4" placeholder="Tell us about your dental history or any fears..." class="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-brand"></textarea>
+                    </div>
+                    <button type="submit" class="w-full bg-accent text-white py-5 rounded-2xl font-bold text-xl shadow-xl shadow-orange-200 hover:bg-orange-600 transition flex items-center justify-center gap-3">
+                        Request My Appointment <i class="fas fa-calendar-check"></i>
+                    </button>
+                    <p id="success-msg" class="hidden text-green-600 font-bold text-center">✓ Thank you! We'll contact you within 1 hour to confirm.</p>
+                </form>
+            </div>
+
+            <div class="lg:w-2/5 reveal">
+                <div class="bg-secondary p-8 rounded-[2rem] h-full">
+                    <h3 class="text-2xl font-bold mb-8 text-brand">Clinic Information</h3>
+                    <div class="space-y-6 mb-8">
+                        <a href="https://maps.google.com" target="_blank" class="flex gap-4 group">
+                            <div class="text-brand text-xl group-hover:scale-110 transition"><i class="fas fa-map-marker-alt"></i></div>
+                            <div>
+                                <p class="font-bold">Visit Us</p>
+                                <p class="text-gray-500 text-sm">Unit 204, Light Residences, EDSA cor. Madison St., Mandaluyong City</p>
+                            </div>
+                        </a>
+                        <a href="tel:+639171234567" class="flex gap-4 group">
+                            <div class="text-brand text-xl group-hover:scale-110 transition"><i class="fas fa-phone-alt"></i></div>
+                            <div>
+                                <p class="font-bold">Call Us</p>
+                                <p class="text-gray-500 text-sm">0917-123-4567 / (02) 888-BRIGHT</p>
+                            </div>
+                        </a>
+                        <div class="flex gap-4">
+                            <div class="text-brand text-xl"><i class="fas fa-clock"></i></div>
+                            <div>
+                                <p class="font-bold">Clinic Hours</p>
+                                <p class="text-gray-500 text-sm">Mon–Sat: 9:00 AM – 6:00 PM</p>
+                                <p class="text-gray-500 text-sm">Sun: By Appointment Only</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Google Maps Embed -->
+                    <div class="rounded-2xl overflow-hidden h-64 shadow-inner mb-6">
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3861.341101968877!2d121.0475!3d14.5768!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTTCsDM0JzM2LjUiTiAxMjHCsDAyJzUxLjAiRQ!5e0!3m2!1sen!2sph!4v1625000000000!5m2!1sen!2sph" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                    </div>
+                    <a href="viber://chat?number=+639171234567" class="flex items-center justify-center gap-3 bg-[#7360f2] text-white p-4 rounded-xl font-bold hover:opacity-90 transition">
+                        <i class="fab fa-viber text-2xl"></i> Message us on Viber
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ SECTION -->
+    <section class="py-24 px-6 md:px-12 bg-gray-50">
+        <div class="max-w-3xl mx-auto">
+            <h2 class="text-4xl font-extrabold mb-12 text-center reveal">Frequently Asked Questions</h2>
+            <div class="space-y-4 reveal">
+                <!-- FAQ 1 -->
+                <div class="bg-white rounded-2xl shadow-sm overflow-hidden border border-gray-100">
+                    <button class="faq-btn w-full px-8 py-6 text-left flex justify-between items-center hover:bg-gray-50 transition">
+                        <span class="font-bold">How much does teeth whitening cost in Mandaluyong?</span>
+                        <i class="fas fa-chevron-down text-brand transition-transform"></i>
+                    </button>
+                    <div class="faq-content hidden px-8 pb-6 text-gray-500">
+                        Our professional in-office whitening starts at ₱4,500. We also offer take-home kits. Prices vary based on the current health of your enamel and the level of staining.
+                    </div>
+                </div>
+                <!-- FAQ 2 -->
+                <div class="bg-white rounded-2xl shadow-sm overflow-hidden border border-gray-100">
+                    <button class="faq-btn w-full px-8 py-6 text-left flex justify-between items-center hover:bg-gray-50 transition">
+                        <span class="font-bold">Is the procedure painful?</span>
+                        <i class="fas fa-chevron-down text-brand transition-transform"></i>
+                    </button>
+                    <div class="faq-content hidden px-8 pb-6 text-gray-500">
+                        We prioritize pain management. We use top-of-the-line local anesthetics and modern techniques to ensure you feel minimal to no discomfort during procedures.
+                    </div>
+                </div>
+                <!-- FAQ 3 -->
+                <div class="bg-white rounded-2xl shadow-sm overflow-hidden border border-gray-100">
+                    <button class="faq-btn w-full px-8 py-6 text-left flex justify-between items-center hover:bg-gray-50 transition">
+                        <span class="font-bold">Do you accept PhilHealth or HMO?</span>
+                        <i class="fas fa-chevron-down text-brand transition-transform"></i>
+                    </button>
+                    <div class="faq-content hidden px-8 pb-6 text-gray-500">
+                        Yes! We are PhilHealth accredited for surgical extractions. We also partner with major HMO providers. Please bring your card for verification.
+                    </div>
+                </div>
+                <!-- FAQ 4 -->
+                <div class="bg-white rounded-2xl shadow-sm overflow-hidden border border-gray-100">
+                    <button class="faq-btn w-full px-8 py-6 text-left flex justify-between items-center hover:bg-gray-50 transition">
+                        <span class="font-bold">Can I pay via GCash or installment?</span>
+                        <i class="fas fa-chevron-down text-brand transition-transform"></i>
+                    </button>
+                    <div class="faq-content hidden px-8 pb-6 text-gray-500">
+                        Definitely. We accept GCash, Maya, and credit card payments. For larger treatments like braces, we offer 0% interest monthly installment plans.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-dark text-white pt-20 pb-10 px-6 md:px-12">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
+            <div class="col-span-1 lg:col-span-1">
+                <a href="#" class="flex items-center gap-2 mb-6">
+                    <div class="bg-brand text-white p-2 rounded-lg">
+                        <i class="fas fa-tooth text-xl"></i>
+                    </div>
+                    <span class="text-xl font-extrabold tracking-tight">BrightSmile</span>
+                </a>
+                <p class="text-gray-400 text-sm mb-6 leading-relaxed">
+                    Providing top-quality, affordable dental care to the Mandaluyong community since 2015. Your smile is our greatest achievement.
+                </p>
+                <div class="flex gap-4">
+                    <a href="#" class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-brand transition"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-brand transition"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-brand transition"><i class="fab fa-tiktok"></i></a>
+                </div>
+            </div>
+            <div>
+                <h5 class="text-lg font-bold mb-6">Quick Links</h5>
+                <ul class="space-y-4 text-gray-400 text-sm">
+                    <li><a href="#services" class="hover:text-white transition">Dental Services</a></li>
+                    <li><a href="#why-us" class="hover:text-white transition">Why Choose Us</a></li>
+                    <li><a href="#promo" class="hover:text-white transition">Monthly Promos</a></li>
+                    <li><a href="#" class="hover:text-white transition">Privacy Policy</a></li>
+                </ul>
+            </div>
+            <div>
+                <h5 class="text-lg font-bold mb-6">Our Services</h5>
+                <ul class="space-y-4 text-gray-400 text-sm">
+                    <li><a href="#services" class="hover:text-white transition">Teeth Whitening</a></li>
+                    <li><a href="#services" class="hover:text-white transition">Orthodontic Braces</a></li>
+                    <li><a href="#services" class="hover:text-white transition">Dental Implants</a></li>
+                    <li><a href="#services" class="hover:text-white transition">Pediatric Care</a></li>
+                </ul>
+            </div>
+            <div>
+                <h5 class="text-lg font-bold mb-6">Newsletter</h5>
+                <p class="text-gray-400 text-sm mb-4">Get dental tips and promo alerts directly to your inbox.</p>
+                <div class="flex gap-2">
+                    <input type="email" placeholder="Email" class="bg-white/10 border-none rounded-lg p-3 text-sm focus:ring-1 focus:ring-brand w-full">
+                    <button class="bg-brand px-4 py-3 rounded-lg"><i class="fas fa-paper-plane"></i></button>
+                </div>
+            </div>
+        </div>
+        <div class="border-t border-white/10 pt-10 text-center text-gray-500 text-xs">
+            <p>© 2025 BrightSmile Dental Clinic. All rights reserved. | Website built for Mandaluyong dental patients.</p>
+        </div>
+    </footer>
+
+    <!-- EXIT INTENT MODAL -->
+    <div id="exit-modal" class="fixed inset-0 z-[100] flex items-center justify-center bg-dark/80 opacity-0 pointer-events-none transition-opacity duration-300 p-4">
+        <div class="bg-white rounded-3xl p-8 max-w-md w-full relative">
+            <button id="close-modal" class="absolute top-4 right-4 text-gray-400 hover:text-dark"><i class="fas fa-times"></i></button>
+            <div class="text-center">
+                <div class="w-20 h-20 bg-accent/10 text-accent rounded-full flex items-center justify-center text-4xl mx-auto mb-6">
+                    <i class="fas fa-gift"></i>
+                </div>
+                <h3 class="text-2xl font-bold mb-2">Wait! Don't Miss Out</h3>
+                <p class="text-gray-500 mb-6">Claim your <strong>FREE Dental Checkup</strong> voucher before you leave.</p>
+                <form class="space-y-4">
+                    <input type="text" placeholder="Your Name" class="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl">
+                    <input type="tel" placeholder="Phone Number" class="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl">
+                    <button class="w-full bg-accent text-white py-4 rounded-xl font-bold text-lg hover:bg-orange-600 transition shadow-lg shadow-orange-100">Send Me the Voucher</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- FLOATING CONTACTS -->
+    <div class="fixed bottom-6 right-6 flex flex-col gap-3 z-40">
+        <!-- Book Mobile CTA -->
+        <a href="#booking" class="md:hidden flex items-center gap-2 bg-accent text-white px-6 py-4 rounded-full font-bold shadow-2xl animate-bounce">
+            <i class="fas fa-calendar-alt"></i> BOOK NOW
+        </a>
+        <a href="https://viber.com" target="_blank" class="w-14 h-14 bg-[#7360f2] text-white rounded-full flex items-center justify-center text-2xl shadow-2xl hover:scale-110 transition">
+            <i class="fab fa-viber"></i>
+        </a>
+        <a href="https://wa.me/639171234567" target="_blank" class="w-14 h-14 bg-[#25D366] text-white rounded-full flex items-center justify-center text-2xl shadow-2xl hover:scale-110 transition">
+            <i class="fab fa-whatsapp"></i>
+        </a>
+    </div>
+
+    <script>
+        // NAVIGATION SCROLL EFFECT
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('bg-white', 'shadow-xl', 'py-3');
+                navbar.classList.remove('bg-transparent', 'py-4');
+            } else {
+                navbar.classList.remove('bg-white', 'shadow-xl', 'py-3');
+                navbar.classList.add('bg-transparent', 'py-4');
+            }
+        });
+
+        // MOBILE MENU
+        const menuBtn = document.getElementById('mobile-menu-btn');
+        const closeBtn = document.getElementById('close-menu');
+        const menu = document.getElementById('mobile-menu');
+        const mobileLinks = document.querySelectorAll('.mobile-link');
+
+        menuBtn.addEventListener('click', () => menu.classList.remove('translate-x-full'));
+        closeBtn.addEventListener('click', () => menu.classList.add('translate-x-full'));
+        mobileLinks.forEach(link => link.addEventListener('click', () => menu.classList.add('translate-x-full')));
+
+        // REVEAL ANIMATIONS
+        const reveal = () => {
+            const reveals = document.querySelectorAll('.reveal');
+            reveals.forEach(el => {
+                const windowHeight = window.innerHeight;
+                const elementTop = el.getBoundingClientRect().top;
+                const elementVisible = 150;
+                if (elementTop < windowHeight - elementVisible) {
+                    el.classList.add('active');
+                }
+            });
+        }
+        window.addEventListener('scroll', reveal);
+        reveal(); // Initial check
+
+        // COUNTDOWN TIMER
+        let countdownDate = new Date().getTime() + (7 * 24 * 60 * 60 * 1000); // 7 days from now
+        setInterval(() => {
+            let now = new Date().getTime();
+            let distance = countdownDate - now;
+            document.getElementById('days').innerText = Math.floor(distance / (1000 * 60 * 60 * 24)).toString().padStart(2, '0');
+            document.getElementById('hours').innerText = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)).toString().padStart(2, '0');
+            document.getElementById('mins').innerText = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)).toString().padStart(2, '0');
+        }, 1000);
+
+        // FAQ ACCORDION
+        document.querySelectorAll('.faq-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const content = btn.nextElementSibling;
+                const icon = btn.querySelector('i');
+                content.classList.toggle('hidden');
+                icon.classList.toggle('rotate-180');
+            });
+        });
+
+        // FORM SUBMISSION
+        const form = document.getElementById('appointment-form');
+        const successMsg = document.getElementById('success-msg');
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            form.querySelector('button').innerText = "Processing...";
+            setTimeout(() => {
+                form.reset();
+                form.querySelector('button').innerText = "Request My Appointment";
+                successMsg.classList.remove('hidden');
+                setTimeout(() => successMsg.classList.add('hidden'), 5000);
+            }, 1500);
+        });
+
+        // EXIT INTENT MODAL
+        let modalShown = false;
+        document.addEventListener('mouseleave', (e) => {
+            if (e.clientY < 0 && !modalShown) {
+                const modal = document.getElementById('exit-modal');
+                modal.classList.remove('opacity-0', 'pointer-events-none');
+                modalShown = true;
+            }
+        });
+        document.getElementById('close-modal').addEventListener('click', () => {
+            document.getElementById('exit-modal').classList.add('opacity-0', 'pointer-events-none');
+        });
+    </script>
+</body>
+</html>
