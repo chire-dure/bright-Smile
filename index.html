@@ -674,17 +674,14 @@
         bookingForm.addEventListener('submit', async (e) => {
             e.preventDefault();
 
-            // Run the browser's built-in validation before sending.
             if (!bookingForm.reportValidity()) return;
 
             const btn = document.getElementById('submitBtn');
             const originalText = btn.innerText;
-            btn.innerText = "Sending Appointment...";
+            btn.innerText = 'Sending Appointment...';
             btn.disabled = true;
 
             const formData = new FormData(bookingForm);
-
-            // Let the clinic reply directly to the patient's email address.
             formData.set('_replyto', bookingForm.querySelector('[name="email"]').value);
 
             try {
@@ -694,21 +691,34 @@
                     headers: { 'Accept': 'application/json' }
                 });
 
-                let result = {};
+                const responseText = await response.text();
+                console.log('FormSubmit HTTP status:', response.status);
+                console.log('FormSubmit response:', responseText);
+
+                let result;
                 try {
-                    result = await response.json();
+                    result = JSON.parse(responseText);
                 } catch (_) {
-                    // Keep the response status as the fallback if JSON isn't returned.
+                    throw new Error('The email service returned an unexpected response. Please try again or call the clinic.');
                 }
 
-                if (response.ok && (result.success === "true" || result.success === true || !("success" in result))) {
-                    bookingForm.reset();
-                    document.getElementById('successModal').classList.add('active');
-                } else {
-                    showToast("Unable to send your request. Please try again or call the clinic.", "error");
+                const confirmedSuccess =
+                    result.success === true ||
+                    result.success === 'true';
+
+                if (!response.ok || !confirmedSuccess) {
+                    console.error('FormSubmit did not confirm success:', result);
+                    throw new Error(
+                        result.message ||
+                        'The email service did not confirm your request. Please try again or call the clinic.'
+                    );
                 }
+
+                bookingForm.reset();
+                document.getElementById('successModal').classList.add('active');
             } catch (error) {
-                showToast("Network error. Please check your connection or call the clinic.", "error");
+                console.error('Appointment submission failed:', error);
+                showToast(error.message || 'Network error. Please check your connection or call the clinic.', 'error');
             } finally {
                 btn.innerText = originalText;
                 btn.disabled = false;
