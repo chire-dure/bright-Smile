@@ -505,7 +505,10 @@
                 </div>
 
                 <div class="booking-form-card reveal">
-                    <form id="bookingForm">
+                    <form id="bookingForm" action="https://formsubmit.co/ajax/escuderoivan09100@gmail.com" method="POST">
+    <!-- Disable captcha & set custom email subject -->
+    <input type="hidden" name="_captcha" value="false">
+    <input type="hidden" name="_subject" value="New Dental Appointment Booking!">
                         <div class="form-row">
                             <div class="form-group">
                                 <label>First Name <span>*</span></label>
@@ -664,25 +667,37 @@
         // Mobile Menu toggle
         function toggleMenu() { document.getElementById('mobileDrawer').classList.toggle('active'); }
 
-        // Booking Form Handling
+        // Booking Form Handling via FormSubmit AJAX
         const bookingForm = document.getElementById('bookingForm');
-        let attempts = 0;
-
-        bookingForm.addEventListener('submit', (e) => {
+        bookingForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            if (attempts >= 5) { showToast("Too many attempts. Please wait.", "error"); return; }
             
             const btn = document.getElementById('submitBtn');
+            const originalText = btn.innerText;
             btn.innerText = "Processing...";
             btn.disabled = true;
 
-            setTimeout(() => {
-                attempts++;
-                document.getElementById('successModal').classList.add('active');
-                bookingForm.reset();
-                btn.innerText = "📅 Confirm My Appointment";
+            const formData = new FormData(bookingForm);
+
+            try {
+                const response = await fetch(bookingForm.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: { 'Accept': 'application/json' }
+                });
+
+                if (response.ok) {
+                    document.getElementById('successModal').classList.add('active');
+                    bookingForm.reset();
+                } else {
+                    showToast("⚠️ Something went wrong. Please try again.", "error");
+                }
+            } catch (error) {
+                showToast("⚠️ Network error. Please call us directly.", "error");
+            } finally {
+                btn.innerText = originalText;
                 btn.disabled = false;
-            }, 1200);
+            }
         });
 
         function closeModal() { document.getElementById('successModal').classList.remove('active'); }
